@@ -21,7 +21,6 @@ const AuthRegister = () => {
         dispatch(registerUser(formData)).then((data)=>{
           console.log("dispatch Payload data:", data);
         })
-        
     }
   return (
     <Box mx="auto" w="full" maxW="md" spacing={6}>
