@@ -29,9 +29,17 @@ export const registerUser = createAsyncThunk(
 //user login
 export const loginUser = createAsyncThunk(
     "auth/login",
-    async (formData) => {
-        const response = await userLogin(formData);
-        return response.data;
+    async (formData, { rejectWithValue }) => {
+        try{
+            const response = await userLogin(formData);
+            return response.data;
+        }catch(err){
+            if(err.response && err.response.data){
+                return rejectWithValue(err.response.data);
+            }else{
+                return rejectWithValue({ message: err.message });
+            }
+        }
     }
 )
 
@@ -67,7 +75,7 @@ const authSlice = createSlice({
         }).addCase(loginUser.fulfilled, (state, action)=>{
             state.isLoading = false;
             state.isError = false;
-            state. action.payload.status ? action.payload.user : null;
+            state.user = action?.payload?.status ? action.payload.user : null;
             state.isAuthenticated = action.payload.status;
         }).addCase(loginUser.rejected, (state, action) => {
             state.isError = true;

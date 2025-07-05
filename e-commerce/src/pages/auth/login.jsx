@@ -17,17 +17,17 @@ const AuthLogin = () => {
     const [formData, setFormData] = useState(initialState);
     const dispatch = useDispatch();
     const Toast = useShowToast();
-    const onSubmit = (event)=>{
+    const onSubmit = async (event)=>{
       event.preventDefault();
-      console.log(formData);
-      dispatch(loginUser(formData)).then((data) => {
-        console.log("dispatch Payload data:", data);
-        if (data?.payload?.success) {
-          Toast("Success", data?.payload?.message, "success");
-        } else {
-          Toast("Error", data?.error?.message, "error");
+
+       try {
+          const data = await dispatch(loginUser(formData)).unwrap();
+          Toast("Success", data?.message, "success");
+        } catch (error) {
+          console.error("Register Error:", error);
+          const errorMsg = error?.message || "Something went wrong";
+          Toast("Error", errorMsg, "error");
         }
-      });
     }
 return (
   <Box mx="auto" w="full" maxW="md" spacing={6}>

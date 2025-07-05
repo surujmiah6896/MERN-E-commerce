@@ -40,7 +40,7 @@ authController.loginUser = async(req, res) =>{
         console.log("user",user);
         
         if(!user){
-            return sendWithError(res, 404, false, "User doesn't exists! Please Register first");
+            return sendWithError(res, 409, false, "User doesn't exists! Please Register first");
         }
 
         const checkPassword = await bcrypt.compare(password, user.password);

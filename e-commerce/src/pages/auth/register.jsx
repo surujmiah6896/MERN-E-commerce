@@ -1,5 +1,5 @@
 import { Box, Heading, Text, Link as ChakraLink } from "@chakra-ui/react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import CustomForm from "../../components/common/form";
 import { registerFormControls } from "../../config";
 import { useState } from "react";
@@ -16,6 +16,7 @@ const AuthRegister = () => {
     const [formData, setFormData] = useState(initialState);
     const dispatch = useDispatch();
     const Toast = useShowToast();
+    const navigate = useNavigate();
 
     const onSubmit = async(e) => {
         e.preventDefault();
@@ -25,6 +26,7 @@ const AuthRegister = () => {
         const data = await dispatch(registerUser(formData)).unwrap();
         console.log("Success Payload:", data);
         Toast("Success", data?.message, "success");
+        navigate("/auth/login");
       } catch (error) {
         console.error("Register Error:", error);
         // If your backend sends: res.status(409).json({ message: "User already exists" })
