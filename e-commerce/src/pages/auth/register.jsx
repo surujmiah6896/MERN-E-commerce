@@ -1,7 +1,22 @@
 import { Box, Heading, Text, Link as ChakraLink } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
+import CustomForm from "../../components/common/form";
+import { registerFormControls } from "../../config";
+import { useState } from "react";
 
+const initialState = {
+    userName: "",
+    email: "",
+    password: ""
+}
 const AuthRegister = () => {
+    const [formData, setFormData] = useState(initialState);
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+        console.log(formData);
+        
+    }
   return (
     <Box mx="auto" w="full" maxW="md" spacing={6}>
       <Box textAlign="center">
@@ -22,7 +37,13 @@ const AuthRegister = () => {
           </ChakraLink>
         </Text>
       </Box>
-      <h1>Common from</h1>
+      <CustomForm
+        formControls={registerFormControls}
+        buttonText={"Sign Up"}
+        formData={formData}
+        setFormData={setFormData}
+        onSubmit={onSubmit}
+      />
     </Box>
   );
 };
