@@ -3,6 +3,8 @@ import { Link as RouterLink } from "react-router-dom";
 import CustomForm from "../../components/common/form";
 import { loginFormControls } from "../../config";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../store/auth-slice";
 
 const initialState = {
   email: "",
@@ -11,11 +13,23 @@ const initialState = {
 
 const AuthLogin = () => {
     const [formData, setFormData] = useState(initialState);
+    const dispatch = useDispatch();
     const onSubmit = (event)=>{
-        event.preventDefault();
-        console.log(formData);
-        
-
+      event.preventDefault();
+      console.log(formData);
+      dispatch(loginUser(formData)).then((data) => {
+        console.log("dispatch Payload data:", data);
+        if (data?.payload?.success) {
+          toast({
+            title: data?.payload?.message,
+          });
+        } else {
+          toast({
+            title: data?.payload?.message,
+            variant: "destructive",
+          });
+        }
+      });
     }
 return (
   <Box mx="auto" w="full" maxW="md" spacing={6}>

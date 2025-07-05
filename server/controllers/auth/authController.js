@@ -14,7 +14,7 @@ authController.registerUser = async(req, res) => {
     try{
         const existUser = await User.findOne({$or: [{email}, {userName}]});
         if (existUser) {
-            return sendWithError(res, 404, false, );
+            return sendWithError(res, 404, false, "User already exists");
             res.status(404).json({status: false, message: "User already exists" });
         }
 
