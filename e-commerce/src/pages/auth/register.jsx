@@ -3,6 +3,8 @@ import { Link as RouterLink } from "react-router-dom";
 import CustomForm from "../../components/common/form";
 import { registerFormControls } from "../../config";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../store/auth-slice";
 
 const initialState = {
     userName: "",
@@ -11,10 +13,14 @@ const initialState = {
 }
 const AuthRegister = () => {
     const [formData, setFormData] = useState(initialState);
+    const dispatch = useDispatch();
 
     const onSubmit = (e) => {
         e.preventDefault();
         console.log(formData);
+        dispatch(registerUser(formData)).then((data)=>{
+          console.log("dispatch Payload data:", data);
+        })
         
     }
   return (
