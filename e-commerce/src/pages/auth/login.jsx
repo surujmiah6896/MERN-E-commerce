@@ -5,29 +5,27 @@ import { loginFormControls } from "../../config";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../store/auth-slice";
+import  useShowToast  from '../../hooks/useShowToast';
 
 const initialState = {
   email: "",
   password: "",
 };
 
+
 const AuthLogin = () => {
     const [formData, setFormData] = useState(initialState);
     const dispatch = useDispatch();
+    const Toast = useShowToast();
     const onSubmit = (event)=>{
       event.preventDefault();
       console.log(formData);
       dispatch(loginUser(formData)).then((data) => {
         console.log("dispatch Payload data:", data);
         if (data?.payload?.success) {
-          toast({
-            title: data?.payload?.message,
-          });
+          Toast("Success", data?.payload?.message, "success");
         } else {
-          toast({
-            title: data?.payload?.message,
-            variant: "destructive",
-          });
+          Toast("Error", data?.error?.message, "error");
         }
       });
     }

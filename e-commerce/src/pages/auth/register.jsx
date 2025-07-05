@@ -5,6 +5,7 @@ import { registerFormControls } from "../../config";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../store/auth-slice";
+import useShowToast from "../../hooks/useShowToast";
 
 const initialState = {
     userName: "",
@@ -14,13 +15,22 @@ const initialState = {
 const AuthRegister = () => {
     const [formData, setFormData] = useState(initialState);
     const dispatch = useDispatch();
+    const Toast = useShowToast();
 
-    const onSubmit = (e) => {
+    const onSubmit = async(e) => {
         e.preventDefault();
         console.log(formData);
-        dispatch(registerUser(formData)).then((data)=>{
-          console.log("dispatch Payload data:", data);
-        })
+
+       try {
+        const data = await dispatch(registerUser(formData)).unwrap();
+        console.log("Success Payload:", data);
+        Toast("Success", data?.message, "success");
+      } catch (error) {
+        console.error("Register Error:", error);
+        // If your backend sends: res.status(409).json({ message: "User already exists" })
+        const errorMsg = error?.message || "Something went wrong";
+        Toast("Error", errorMsg, "error");
+      }
     }
   return (
     <Box mx="auto" w="full" maxW="md" spacing={6}>

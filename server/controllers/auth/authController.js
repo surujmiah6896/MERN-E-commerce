@@ -14,10 +14,8 @@ authController.registerUser = async(req, res) => {
     try{
         const existUser = await User.findOne({$or: [{email}, {userName}]});
         if (existUser) {
-            return sendWithError(res, 404, false, "User already exists");
-            res.status(404).json({status: false, message: "User already exists" });
+            return sendWithError(res, 409, false, "User already exists");
         }
-
         const hashPassword = await bcrypt.hash(password, 12);
         const newUser = new User({
             userName,
@@ -26,16 +24,10 @@ authController.registerUser = async(req, res) => {
         });
 
         await newUser.save();
-        res.status(200).json({
-            status: true,
-            message: "Register Successful",
-        });
+        sendWithError(res, 200, true, "Register Successful");
     }catch(e){
-        console.log(e);
-        res.status(500).json({
-            status: false,
-            message: "some error occured",
-        });
+        console.log("e",e);
+        sendWithError(res, 500, false, "some error occured");
     }
 }
 

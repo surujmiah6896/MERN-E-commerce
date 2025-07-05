@@ -2,14 +2,14 @@ import axios from "axios";
 
 //user register
 export const userStore = async (formData) => {
-    console.log("user register api call");
+    console.log("user register api call", formData);
     const response = await axios.post(
       "http://localhost:5000/api/auth/register",
       formData,
       { withCredentials: true }
     );
-  console.log(response);
-  return response.json();
+  console.log("res api",response);
+  return response;
 };
 
 
@@ -23,5 +23,5 @@ export const userLogin = async (formData) => {
     }
   );
   console.log(response);
-  return response.json();
+  return response;
 }

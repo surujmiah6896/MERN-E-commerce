@@ -11,11 +11,20 @@ const initialState = {
 
 //user register
 export const registerUser = createAsyncThunk(
-    'auth/register',
-        async (formData) => {
-        const response = await userStore(formData);
-        return response.data;
-    });
+  "auth/register",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await userStore(formData);
+      return response.data;
+    } catch (err) {
+      if (err.response && err.response.data) {
+        return rejectWithValue(err.response.data);
+      } else {
+        return rejectWithValue({ message: err.message });
+      }
+    }
+  }
+);
 
 //user login
 export const loginUser = createAsyncThunk(
