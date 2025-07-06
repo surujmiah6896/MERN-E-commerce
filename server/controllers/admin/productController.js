@@ -35,4 +35,45 @@ productController.addProduct = async(req, res) =>{
     }
 }
 
+//edit product
+productController.editProduct = async(req, res) => {
+    try{
+        const {
+          image,
+          title,
+          description,
+          category,
+          brand,
+          price,
+          salePrice,
+          totalStock,
+          averageReview,
+        } = req.body;
+
+        const id = req.params;
+        const findProduct = Product.findById(id);
+        if (!findProduct) {
+          return sendWithResponse(res, 401, false, "Product not found");
+        }
+
+        findProduct.title = title || findProduct.title;
+        findProduct.description = description || findProduct.description;
+        findProduct.category = category || findProduct.category;
+        findProduct.brand = brand || findProduct.brand;
+        findProduct.price = price === "" ? 0 : price || findProduct.price;
+        findProduct.salePrice =
+          salePrice === "" ? 0 : salePrice || findProduct.salePrice;
+        findProduct.totalStock = totalStock || findProduct.totalStock;
+        findProduct.image = image || findProduct.image;
+        findProduct.averageReview = averageReview || findProduct.averageReview;
+
+        await findProduct.save();
+        return sendWithResponse(res, 200, true, "product update Successfully");
+
+    }catch(err){
+        return sendWithResponse(res, 500, false, "some server error");
+    }
+    
+};
+
 module.exports = productController;
