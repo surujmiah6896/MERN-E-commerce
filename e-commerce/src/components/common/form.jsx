@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormLabel, Input, Select, VStack } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormLabel, Input, Select, Textarea, VStack } from "@chakra-ui/react";
 
 function CustomForm({
   formControls,

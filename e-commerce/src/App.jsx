@@ -10,6 +10,7 @@ import { checkAuth } from "./store/auth-slice";
 import CheckAuth from "./components/common/check-auth";
 import AdminLayout from "./components/admin/layout";
 import AdminDashboard from "./pages/admin/dashboard";
+import AdminProducts from "./pages/admin/products";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -44,6 +45,7 @@ function App() {
         {/* admin */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="dashboard" element={<AdminDashboard />}></Route>
+          <Route path="products" element={<AdminProducts />}></Route>
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />
