@@ -71,9 +71,10 @@ authController.loginUser = async(req, res) =>{
 
 //logout user
 authController.logoutUser = async (req, res) =>{
+    console.log("log out user contd");
     res.clearCookie("token").json({
-        status: true,
-        message: "Logged out successfully!"
+      status: true,
+      message: "Logged out successfully!",
     });
 }
 

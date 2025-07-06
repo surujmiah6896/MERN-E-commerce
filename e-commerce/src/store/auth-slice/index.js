@@ -51,9 +51,11 @@ export const loginUser = createAsyncThunk(
 //user logout
 export const logoutUser = createAsyncThunk(
     "auth/logout",
-    async ({rejectWithValue}) => {
+    async (formData = null, {rejectWithValue}) => {
         try{
             const response = await userLogout();
+            console.log("response user logout thank", response);
+            
             return response.data;
         }catch(err){
             if(err.response && err.response.data){

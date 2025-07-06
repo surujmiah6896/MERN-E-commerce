@@ -6,7 +6,7 @@ import AuthRegister from "./pages/auth/register";
 import NotFoundPage from "./pages/not-found";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { checkAuth } from "./store/auth-slice";
+import { checkAuth, logoutUser } from "./store/auth-slice";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -16,7 +16,7 @@ function App() {
 
   useEffect(()=>{
     
-    dispatch(checkAuth());
+    dispatch(logoutUser());
     console.log("useEffect dispatch");
   },[dispatch]);
 

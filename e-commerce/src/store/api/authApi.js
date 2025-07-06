@@ -27,6 +27,8 @@ export const userLogin = async (formData) => {
 
 //user logout
 export const userLogout = async () => {
+  console.log("user logout api");
+  
   const response = await axios.post("http://localhost:5000/api/auth/logout", {
     withCredentials: true,
   });
