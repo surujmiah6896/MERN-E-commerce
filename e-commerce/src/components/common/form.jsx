@@ -99,7 +99,7 @@ function CustomForm({
   }
   return (
     <Box as="form" onSubmit={onSubmit}>
-      <VStack spacing={3} align="stretch">
+      <VStack spacing={3} align="stretch" mb={5}>
         {formControls.map((controlItem) => (
           <FormControl key={controlItem.name}>
             <FormLabel mb={1}>{controlItem.label}</FormLabel>

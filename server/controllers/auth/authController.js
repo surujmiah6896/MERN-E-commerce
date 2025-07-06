@@ -31,7 +31,6 @@ authController.registerUser = async(req, res) => {
     }
 }
 
-
 //login user
 authController.loginUser = async(req, res) =>{
     const {email, password} = req.body;
@@ -68,6 +67,14 @@ authController.loginUser = async(req, res) =>{
         console.log(e);
         res.status(500).json(sendWithError(true, 'Some error occured'));
     }
+}
+
+//logout user
+authController.logoutUser = async (req, res) =>{
+    res.clearCookie("token").json({
+        status: true,
+        message: "Logged out successfully!"
+    });
 }
 
 
