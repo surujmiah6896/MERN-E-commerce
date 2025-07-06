@@ -1,5 +1,10 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import { userStore, userLogin, userLogout } from "../api/authApi";
+import {
+  userStore,
+  userLogin,
+  userLogout,
+  userAuthCheck,
+} from "../api/authApi";
 
 const initialState = {
     isAuthenticated: false,
@@ -41,11 +46,9 @@ export const loginUser = createAsyncThunk(
             }
         }
     }
-)
-
+);
 
 //user logout
-
 export const logoutUser = createAsyncThunk(
     "auth/logout",
     async ({rejectWithValue}) => {
@@ -60,8 +63,21 @@ export const logoutUser = createAsyncThunk(
             }
         }
     }
-)
+);
 
+//user auth check
+export const checkAuth = createAsyncThunk("auth/checkauth", async ({rejectWithValue}) =>{
+    try{
+        const response = await userAuthCheck();
+        return response.data;
+    }catch(err){
+        if(err.response && err.response.data){
+            return rejectWithValue(err.response.data);
+        }else{
+            return rejectWithValue({message: err.message});
+        }
+    }
+});
 
 
 const authSlice = createSlice({
