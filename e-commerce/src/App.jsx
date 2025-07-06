@@ -6,7 +6,7 @@ import AuthRegister from "./pages/auth/register";
 import NotFoundPage from "./pages/not-found";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { checkAuth, logoutUser } from "./store/auth-slice";
+import { checkAuth } from "./store/auth-slice";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -15,13 +15,11 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(()=>{
-    
-    dispatch(logoutUser());
-    console.log("useEffect dispatch");
+    dispatch(checkAuth());
   },[dispatch]);
 
   console.log(isLoading, user, isAuthenticated);
-  // if(isLoading) return <Skeleton className="w-[800] bg-black h-[600px]" />;
+  if(isLoading) return <Skeleton className="w-[800] bg-black h-[600px]" />;
   
   return (
     <Flex direction="column" overflow="hidden" bg="white">
