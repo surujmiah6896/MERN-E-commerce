@@ -2,6 +2,7 @@ const { sendWithResponse } = require("../../Helpers");
 const Product = require("../../models/Product");
 const productController = {};
 
+//add product
 productController.addProduct = async(req, res) =>{
     try{
         const {
@@ -74,6 +75,23 @@ productController.editProduct = async(req, res) => {
         return sendWithResponse(res, 500, false, "some server error");
     }
     
+};
+
+//delete a product
+productController.deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findByIdAndDelete(id);
+
+    if (!product) {
+      return sendWithResponse(res, 404, false, "Product not found");
+    }
+
+    return sendWithResponse(res, 200, true, "Product delete successfully");
+  } catch (e) {
+    console.log(e);
+    return sendWithResponse(res, 500, false, "Some Error Occured");
+  }
 };
 
 module.exports = productController;
