@@ -10,11 +10,63 @@ import {
   VStack,
   Heading,
   Flex,
+  HStack,
+  Text,
 } from "@chakra-ui/react";
+import {
+  BadgeCheck,
+  ChartNoAxesCombined,
+  LayoutDashboard,
+  ShoppingBasket,
+} from "lucide-react";
 import { Fragment } from "react";
-import { useNavigate } from "react-router-dom";
-import { ChartNoAxesCombined } from "lucide-react"; // Assuming this is an icon component
-// import MenuItems from "./MenuItems"; // Your custom menu items
+import { useNavigate } from "react-router-dom";// Assuming this is an icon component
+
+const adminSidebarMenuItems = [
+  {
+    id: "dashboard",
+    label: "Dashboard",
+    path: "/admin/dashboard",
+    icon: <LayoutDashboard />,
+  },
+  {
+    id: "products",
+    label: "Products",
+    path: "/admin/products",
+    icon: <ShoppingBasket />,
+  },
+  {
+    id: "orders",
+    label: "Orders",
+    path: "/admin/orders",
+    icon: <BadgeCheck />,
+  },
+];
+function MenuItems({setOpen}){
+    const navigate = useNavigate();
+    return (
+      <VStack as="nav" mt={8} spacing={2} align="stretch">
+        {adminSidebarMenuItems.map((menuItem) => (
+          <HStack
+            key={menuItem.id}
+            px={3}
+            py={2}
+            borderRadius="md"
+            cursor="pointer"
+            onClick={() => {
+              navigate(menuItem.path);
+              if (setOpen) setOpen(false);
+            }}
+            _hover={{ bg: "gray.100", color: "gray.900" }}
+            color="gray.600"
+          >
+            <Box>{menuItem.icon}</Box>
+            <Text fontSize="lg">{menuItem.label}</Text>
+          </HStack>
+        ))}
+      </VStack>
+    );
+}
 
 const AdminSidebar = ({ open, setOpen }) => {
   const navigate = useNavigate();
@@ -24,7 +76,7 @@ const AdminSidebar = ({ open, setOpen }) => {
     <Fragment>
       {/* Mobile Drawer Sidebar */}
       {isMobile && (
-        <Drawer  isOpen={open} placement="left" onClose={() => setOpen(false)}>
+        <Drawer isOpen={open} placement="left" onClose={() => setOpen(false)}>
           <DrawerOverlay />
           <DrawerContent maxW="16rem">
             <DrawerCloseButton mt="6" />
@@ -38,7 +90,7 @@ const AdminSidebar = ({ open, setOpen }) => {
             </DrawerHeader>
             <DrawerBody>
               <VStack spacing={4} align="stretch" h="full">
-                {/* <MenuItems setOpen={setOpen} /> */}
+                <MenuItems setOpen={setOpen}/>
               </VStack>
             </DrawerBody>
           </DrawerContent>
@@ -68,7 +120,7 @@ const AdminSidebar = ({ open, setOpen }) => {
               Admin Panel
             </Heading>
           </Flex>
-          {/* <MenuItems /> */}
+          <MenuItems />
         </Box>
       )}
     </Fragment>
