@@ -7,6 +7,7 @@ import NotFoundPage from "./pages/not-found";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
+import CheckAuth from "./components/common/check-auth";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -25,6 +26,7 @@ function App() {
     <Flex direction="column" overflow="hidden" bg="white">
       {/* children here */}
       <Routes>
+        <Route path="/" element={<CheckAuth isAuthenticated={isAuthenticated} user={user}> </CheckAuth>} />
         <Route path="/auth" element={<AuthLayout />}>
           <Route path="login" element={<AuthLogin />}></Route>
           <Route path="register" element={<AuthRegister />}></Route>
