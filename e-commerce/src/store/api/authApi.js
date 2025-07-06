@@ -30,13 +30,11 @@ export const userLogout = async () => {
   const response = await axios.post("http://localhost:5000/api/auth/logout", {
     withCredentials: true,
   });
-  console.log(response);
   return response;
 };
 
 // user auth check
 export const userAuthCheck = async () => {
-  console.log("userAuthCheck Api");
   
   const response = await axios.get(
     "http://localhost:5000/api/auth/check-auth",
