@@ -94,4 +94,19 @@ productController.deleteProduct = async (req, res) => {
   }
 };
 
+//get all product
+productController.getAllProduct = async (req, res) => {
+    try {
+      const allProducts = await Product.find({});
+
+      if (!allProducts) {
+        return sendWithResponse(res, 401, false, "Empty product!");
+      }
+      return sendWithData(res, 200, true, allProducts, "product get successfully");
+    } catch (e) {
+      console.log(e);
+      return sendWithResponse(res, 500, false, "Some Error Occured");
+    }
+}
+
 module.exports = productController;
