@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
 import CheckAuth from "./components/common/check-auth";
+import AdminLayout from "./components/admin/layout";
+import AdminDashboard from "./pages/admin/dashboard";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -26,10 +28,22 @@ function App() {
     <Flex direction="column" overflow="hidden" bg="white">
       {/* children here */}
       <Routes>
-        <Route path="/" element={<CheckAuth isAuthenticated={isAuthenticated} user={user}> </CheckAuth>} />
+        <Route
+          path="/"
+          element={
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+              {" "}
+            </CheckAuth>
+          }
+        />
+        {/* auth */}
         <Route path="/auth" element={<AuthLayout />}>
           <Route path="login" element={<AuthLogin />}></Route>
           <Route path="register" element={<AuthRegister />}></Route>
+        </Route>
+        {/* admin */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="dashboard" element={<AdminDashboard />}></Route>
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

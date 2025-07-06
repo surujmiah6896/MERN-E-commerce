@@ -9,12 +9,12 @@ const AdminLayout = () => {
         {/* admin sidebar */}
             <AdminSideBar/>
         {/* main content */}
-        <Flex flex={1} direction={"column"}>
+        <Flex flex="1" direction={"column"}>
             {/* admin header */}
             <AdminHeader/>
 
             {/* main area */}
-            <Box flex={1} bg="gray.50" p={{base:4, md:6}}>
+            <Box flex="1" bg="gray.50" p={{base:4, md:6}}>
                 <Outlet/>
             </Box>
         </Flex>
