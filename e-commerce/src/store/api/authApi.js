@@ -25,3 +25,10 @@ export const userLogin = async (formData) => {
   console.log(response);
   return response;
 }
+
+//user logout
+export const userLogout = async () => {
+  const response = await axios.post("http://localhost:5000/api/auth/logout",{withCredentials: true});
+  console.log(response);
+  return response;
+}
