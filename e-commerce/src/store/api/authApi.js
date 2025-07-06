@@ -27,9 +27,7 @@ export const userLogin = async (formData) => {
 
 //user logout
 export const userLogout = async () => {
-  console.log("user logout api");
-  
-  const response = await axios.post("http://localhost:5000/api/auth/logout", {
+  const response = await axios.post("http://localhost:5000/api/auth/logout",{}, {
     withCredentials: true,
   });
   return response;
@@ -38,15 +36,19 @@ export const userLogout = async () => {
 // user auth check
 export const userAuthCheck = async () => {
   
-  const response = await axios.get(
-    "http://localhost:5000/api/auth/check-auth",
-    {
-      withCredentials: true,
-      headers: {
-        "Cache-Control":
-          "no-store, no-cache, must-revalidate, proxy-revalidate",
-      },
-    }
-  );
-  return response;
+   try{
+    const response = await axios.get(
+      "http://localhost:5000/api/auth/check-auth",
+      {
+        withCredentials: true,
+        headers: {
+          "Cache-Control":
+            "no-store, no-cache, must-revalidate, proxy-revalidate",
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error("Auth check failed:", error);
+  }
 };

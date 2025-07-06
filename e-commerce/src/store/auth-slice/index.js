@@ -54,8 +54,6 @@ export const logoutUser = createAsyncThunk(
     async (formData = null, {rejectWithValue}) => {
         try{
             const response = await userLogout();
-            console.log("response user logout thank", response);
-            
             return response.data;
         }catch(err){
             if(err.response && err.response.data){
@@ -72,10 +70,7 @@ export const checkAuth = createAsyncThunk(
   "auth/checkauth",
   async (formData = null, { rejectWithValue }) => {
     try {
-      console.log("check atuh slice");
-
       const response = await userAuthCheck();
-      console.log("check auth slice res:",response);
       return response.data;
     } catch (err) {
       if (err.response && err.response.data) {

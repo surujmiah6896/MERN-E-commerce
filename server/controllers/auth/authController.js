@@ -1,7 +1,7 @@
 const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const {sendWithError} = require('../../Helpers/index');
+const {sendWithResponse} = require('../../Helpers/index');
 
 
 
@@ -14,7 +14,7 @@ authController.registerUser = async(req, res) => {
     try{
         const existUser = await User.findOne({$or: [{email}, {userName}]});
         if (existUser) {
-            return sendWithError(res, 409, false, "User already exists");
+            return sendWithResponse(res, 409, false, "User already exists");
         }
         const hashPassword = await bcrypt.hash(password, 12);
         const newUser = new User({
@@ -24,10 +24,10 @@ authController.registerUser = async(req, res) => {
         });
 
         await newUser.save();
-        sendWithError(res, 200, true, "Register Successful");
+        sendWithResponse(res, 200, true, "Register Successful");
     }catch(e){
         console.log("e",e);
-        sendWithError(res, 500, false, "some error occured");
+        sendWithResponse(res, 500, false, "some error occured");
     }
 }
 
@@ -39,12 +39,12 @@ authController.loginUser = async(req, res) =>{
         console.log("user",user);
         
         if(!user){
-            return sendWithError(res, 409, false, "User doesn't exists! Please Register first");
+            return sendWithResponse(res, 409, false, "User doesn't exists! Please Register first");
         }
 
         const checkPassword = await bcrypt.compare(password, user.password);
         if(!checkPassword){
-            return sendWithError(res, 401, false, "Incorrect password! please try again");
+            return sendWithResponse(res, 401, false, "Incorrect password! please try again");
         }
         const token = jwt.sign({
             id: user._id,
@@ -53,29 +53,47 @@ authController.loginUser = async(req, res) =>{
             userName: user.userName,
         },"CLIENT_SECRET_KEY",{expiresIn: "60m"});
 
-        res.cookie("token", token, {httpOnly: true, secure:false}).json({
+        res
+          .cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/",
+          })
+          .json({
             status: true,
             message: "Logged in Successfully",
-            user:{
-                email: user.email,
-                role: user.role,
-                id: user._id,
-                userName: user.userName,
+            user: {
+              email: user.email,
+              role: user.role,
+              id: user._id,
+              userName: user.userName,
             },
-        });
+          });
     }catch(e){
         console.log(e);
-        res.status(500).json(sendWithError(true, 'Some error occured'));
+        res.status(500).json(sendWithResponse(true, 'Some error occured'));
     }
 }
 
 //logout user
 authController.logoutUser = async (req, res) =>{
-    console.log("log out user contd");
-    res.clearCookie("token").json({
-      status: true,
-      message: "Logged out successfully!",
-    });
+    try {
+        res
+          .clearCookie("token", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/",
+          })
+          .json({
+            success: true,
+            message: "Logged out successfully!",
+          });
+    } catch (err) {
+      return sendWithResponse(res, 500, false,"Logout failed");
+    }
+    
 }
 
 

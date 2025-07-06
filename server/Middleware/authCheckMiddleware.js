@@ -1,11 +1,11 @@
 const jwt = require("jsonwebtoken");
-const { sendWithError } = require("../Helpers");
+const { sendWithResponse } = require("../Helpers");
 
 const authCheckMiddleware = async (req, res, next) => {
-  const token = req.cookies?.token;
+  const token = req.cookies.token;
 
   if (!token) {
-    return sendWithError(res, 401, false, "Unauthorized user!");
+    return sendWithResponse(res, 401, false, "Unauthorized user!");
   }
 
   try {
@@ -16,7 +16,7 @@ const authCheckMiddleware = async (req, res, next) => {
     next();
   } catch (err) {
     console.log("Unauthorized", err);
-    sendWithError(res, 401, false, "Unauthorized user!");
+   return sendWithResponse(res, 401, false, "Unauthorized user!");
   }
 }; 
 
