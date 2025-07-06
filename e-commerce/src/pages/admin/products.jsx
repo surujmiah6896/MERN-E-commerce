@@ -15,6 +15,7 @@ import {
 import { Fragment, useState } from "react";
 import {addProductFormElements} from "../../config/index";
 import CustomForm from "../../components/common/form";
+import ProductImageUpload from "../../components/admin/image-upload";
 
 const initialFormData = {
   image: null,
@@ -76,6 +77,7 @@ const AdminProducts = () => {
           </DrawerHeader>
 
           <DrawerBody>
+            <ProductImageUpload/>
             <Box py={6}>
               {/* Form content goes here */}
               <CustomForm

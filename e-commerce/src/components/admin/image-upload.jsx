@@ -10,18 +10,28 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { UploadCloud, FileIcon, X } from "lucide-react"; // Replace with Chakra icons if preferred
+import { useRef } from "react";
 
-const ImageUploader = ({
-  isCustomStyling,
-  isEditMode,
+const ProductImageUpload = ({
   imageFile,
+  setImageFile,
   imageLoadingState,
-  handleDragOver,
-  handleDrop,
-  inputRef,
-  handleImageFileChange,
-  handleRemoveImage,
+  uploadedImageUrl,
+  setUploadedImageUrl,
+  setImageLoadingState,
+  isEditMode,
+  isCustomStyling = false,
 }) => {
+    const inputRef = useRef(null);
+    const uploadColor = useColorModeValue("#718096", "#A0AEC0");
+    const handleImageFileChange = ()=>{
+        console.log("file change");
+        
+    }
+    const handleRemoveImage = () => {
+        console.log('remove image');
+        
+    }
   return (
     <Box
       w="full"
@@ -33,8 +43,8 @@ const ImageUploader = ({
         Upload Image
       </FormLabel>
       <Box
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
+        // onDragOver={handleDragOver}
+        // onDrop={handleDrop}
         borderWidth="2px"
         borderStyle="dashed"
         borderRadius="lg"
@@ -60,10 +70,7 @@ const ImageUploader = ({
             justifyContent="center"
             h="8rem"
           >
-            <UploadCloud
-              size={40}
-              color={useColorModeValue("#718096", "#A0AEC0")}
-            />
+            <UploadCloud size={40} color={uploadColor} />
             <Text mt={2}>Drag & drop or click to upload image</Text>
           </FormLabel>
         ) : imageLoadingState ? (
@@ -95,4 +102,4 @@ const ImageUploader = ({
   );
 };
 
-export default ImageUploader;
+export default ProductImageUpload;
