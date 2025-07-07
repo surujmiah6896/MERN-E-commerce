@@ -41,11 +41,11 @@ const AdminProducts = () => {
   const [imageFile, setImageFile] = useState(null);
   // const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   // const [imageLoadingState, setImageLoadingState] = useState(false);
-  const { productList } = useSelector((state) => state.adminProducts);
+  const { error, isLoding, products}  = useSelector((state) => state.adminProducts);
   const dispatch = useDispatch();
   const Toast = useShowToast();
 
-  console.log("productList", productList);
+  console.log("productList", products);
   
 
   const handleClose = () => {
@@ -97,11 +97,12 @@ const AdminProducts = () => {
           lg: "repeat(4, 1fr)",
         }}
       >
-        {productList && productList.length > 0
-          ? productList.map((productItem) => (
+        {products && products.length > 0
+          ? products.map((productItem) => (
               <AdminProductList
+                key={productItem._id}
                 setFormData={setFormData}
-                isOpen={isOpen}
+                onOpen={onOpen}
                 setCurrentEditedId={setCurrentEditedId}
                 product={productItem}
                 handleDelete={handleDelete}

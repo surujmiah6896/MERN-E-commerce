@@ -11,7 +11,7 @@ import {
 function AdminProductList({
   product,
   setFormData,
-  setOpenCreateProductsDialog,
+  onOpen,
   setCurrentEditedId,
   handleDelete,
 }) {
@@ -27,7 +27,7 @@ function AdminProductList({
     >
       <Box position="relative">
         <Image
-          src={product?.image}
+          src={`http://localhost:5000/uploads/products/${product?.image}`}
           alt={product?.title}
           objectFit="cover"
           w="full"
@@ -37,7 +37,7 @@ function AdminProductList({
       </Box>
 
       <Box p="6">
-        <Heading as="h2" size="lg" mb="2" mt="2">
+        <Heading as="h2" size="lg" mb="2" mt="2" color={"blackAlpha.700"}>
           {product?.title}
         </Heading>
 
@@ -62,7 +62,7 @@ function AdminProductList({
           <Button
             colorScheme="teal"
             onClick={() => {
-              setOpenCreateProductsDialog(true);
+              onOpen(true);
               setCurrentEditedId(product?._id);
               setFormData(product);
             }}
