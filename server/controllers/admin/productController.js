@@ -36,8 +36,7 @@ productController.addProduct = async(req, res) =>{
       return sendWithData(res, 200, true, newProduct, "Product Add Successful");
     }catch(err){
       console.log("add controller error",err);
-      
-        return sendWithResponse(res, 500, false, err);
+      return sendWithResponse(res, 500, false, err);
     }
 }
 

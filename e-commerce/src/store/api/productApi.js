@@ -12,3 +12,12 @@ export const addProduct = async (formData) => {
   );
   return response;
 };
+
+export const getProducts = async () => {
+  const response = await axios.get(
+    "http://localhost:5000/api/admin/products/all"
+  );
+  console.log("response",response);
+  
+  return response;
+};

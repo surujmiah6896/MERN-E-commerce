@@ -12,13 +12,14 @@ import {
   Heading,
   Flex,
 } from "@chakra-ui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {addProductFormElements} from "../../config/index";
 import CustomForm from "../../components/common/form";
 import ProductImageUpload from "../../components/admin/image-upload";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewProduct } from "../../store/admin/product-slice";
+import { addNewProduct, getAllProducts } from "../../store/admin/product-slice";
 import useShowToast from "../../hooks/useShowToast";
+import AdminProductList from "../../components/admin/product-list";
 
 const initialFormData = {
   image: null,
@@ -40,8 +41,12 @@ const AdminProducts = () => {
   const [imageFile, setImageFile] = useState(null);
   // const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   // const [imageLoadingState, setImageLoadingState] = useState(false);
+  const { productList } = useSelector((state) => state.adminProducts);
   const dispatch = useDispatch();
   const Toast = useShowToast();
+
+  console.log("productList", productList);
+  
 
   const handleClose = () => {
     onClose();
@@ -49,16 +54,30 @@ const AdminProducts = () => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-   
-    dispatch(addNewProduct({...formData,image:imageFile,})).then((data)=>{
-      if(data?.payload?.status){
-        onClose();
-        setImageFile(null);
-        setFormData(initialFormData);
-        Toast("Success", "Product Add Successfully");
+     try {
+        const data = await dispatch(addNewProduct({ ...formData, image: imageFile })).unwrap();
+        if(data?.status){
+          dispatch(getAllProducts());
+          onClose();
+          setImageFile(null);
+          setFormData(initialFormData);
+          Toast("Success", "Product Add Successfully", "success");
+        }
+      } catch (error) {
+        console.error("Register Error:", error);
+        const errorMsg =
+          error?.message || error?.errors?.avatar?.msg || "Something went wrong";
+        Toast("Error", errorMsg, "error");
       }
-    });
   };
+
+  const handleDelete = async () => {
+
+  }
+
+  useEffect(() => {
+    dispatch(getAllProducts());
+  }, [dispatch]);
 
   return (
     <Fragment>
@@ -78,7 +97,17 @@ const AdminProducts = () => {
           lg: "repeat(4, 1fr)",
         }}
       >
-        {/* Add product cards or components here */}
+        {productList && productList.length > 0
+          ? productList.map((productItem) => (
+              <AdminProductList
+                setFormData={setFormData}
+                isOpen={isOpen}
+                setCurrentEditedId={setCurrentEditedId}
+                product={productItem}
+                handleDelete={handleDelete}
+              />
+            ))
+          : null}
       </Grid>
 
       {/* Drawer (Chakra's alternative to Sheet) */}
@@ -96,10 +125,6 @@ const AdminProducts = () => {
             <ProductImageUpload
               imageFile={imageFile}
               setImageFile={setImageFile}
-              // setUploadedImageUrl={setUploadedImageUrl}
-              // uploadedImageUrl={uploadedImageUrl}
-              // setImageLoadingState={setImageLoadingState}
-              // imageLoadingState={imageLoadingState}
               isEditMode={currentEditedId !== null}
             />
             <Box py={6}>
