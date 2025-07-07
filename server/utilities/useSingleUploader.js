@@ -4,9 +4,9 @@ const path = require('path');
 const createError = require('http-errors');
 
 
-const useSingleUploader = (subFolderPath, allowedFileTypes, maxFileSize, errorMsg) => {
+const useSingleUploader = (sub_folder_path, allowed_file_types, max_file_size, error_msg) => {
     //file upload folder
-    const UPLOADS_FOLDER = `${__dirname}/..public/uploads/${subFolderPath}/`;
+    const UPLOADS_FOLDER = `${__dirname}/..public/uploads/${sub_folder_path}/`;
 
     //define the store
     const storage = multer.diskStorage({
@@ -24,13 +24,13 @@ const useSingleUploader = (subFolderPath, allowedFileTypes, maxFileSize, errorMs
     const update = multer({
         storage:storage,
         limits: {
-            fieldSize: maxFileSize,
+            fieldSize: max_file_size,
         },
         fileFilter: (req, file, cb)=>{
-            if(allowedFileTypes.includes(file.mimetype)){
+            if(allowed_file_types.includes(file.mimetype)){
                 cb(null, true);
             }else{
-                cb(createError(errorMsg));
+                cb(createError(error_msg));
             }
         },
     });
