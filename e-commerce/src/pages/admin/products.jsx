@@ -28,9 +28,7 @@ const initialFormData = {
   totalStock: "",
   averageReview: 0,
 };
-const onSubmit = async(event)=> {
-    event.preventDefault();
-}
+
 
 const AdminProducts = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,7 +41,11 @@ const AdminProducts = () => {
   const handleClose = () => {
     onClose();
   };
-
+  
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    console.log("products imageFile", imageFile);
+  };
   return (
     <Fragment>
       {/* Add Product Button */}
@@ -77,7 +79,15 @@ const AdminProducts = () => {
           </DrawerHeader>
 
           <DrawerBody>
-            <ProductImageUpload/>
+            <ProductImageUpload
+              imageFile={imageFile}
+              setImageFile={setImageFile}
+              uploadedImageUrl={uploadedImageUrl}
+              setUploadedImageUrl={setUploadedImageUrl}
+              setImageLoadingState={setImageLoadingState}
+              imageLoadingState={imageLoadingState}
+              isEditMode={currentEditedId !== null}
+            />
             <Box py={6}>
               {/* Form content goes here */}
               <CustomForm

@@ -1,7 +1,7 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addProduct } from "../../api/productApi";
 
-const { createSlice } = require("@reduxjs/toolkit");
 
 const initialState = {
   isLoading: false,
@@ -23,11 +23,11 @@ const AdminProductsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(addNewProduct, (state) => {
+      .addCase(addNewProduct.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(addNewProduct, (state, action) => {
+      .addCase(addNewProduct.fulfilled, (state, action) => {
         console.log("addnew product slice action", action);
       })
       .addCase(addNewProduct.rejected, (state, action) => {
@@ -37,3 +37,6 @@ const AdminProductsSlice = createSlice({
       });
   },
 });
+
+
+export default AdminProductsSlice.reducer;

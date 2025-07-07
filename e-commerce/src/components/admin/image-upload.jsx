@@ -24,9 +24,12 @@ const ProductImageUpload = ({
 }) => {
     const inputRef = useRef(null);
     const uploadColor = useColorModeValue("#718096", "#A0AEC0");
-    const handleImageFileChange = ()=>{
-        console.log("file change");
-        
+    const handleImageFileChange = (e)=>{
+        console.log("file change", e.target.files);
+        const selectedFile = e.target.files?.[0];
+        if(selectedFile){
+          setImageFile(selectedFile);
+        }
     }
     const handleRemoveImage = () => {
         console.log('remove image');
