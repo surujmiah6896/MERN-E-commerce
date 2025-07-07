@@ -24,6 +24,8 @@ const ProductImageUpload = ({
 }) => {
     const inputRef = useRef(null);
     const uploadColor = useColorModeValue("#718096", "#A0AEC0");
+
+    //upload image
     const handleImageFileChange = (e)=>{
         console.log("file change", e.target.files);
         const selectedFile = e.target.files?.[0];
@@ -31,9 +33,13 @@ const ProductImageUpload = ({
           setImageFile(selectedFile);
         }
     }
-    const handleRemoveImage = () => {
-        console.log('remove image');
-        
+
+    //image remove
+    const handleRemoveImage = ()=> {
+      setImageFile(null);
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
     }
   return (
     <Box
