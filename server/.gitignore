@@ -11,3 +11,4 @@ logs
 # misc
 .DS_Store
 Dockerfile
+public
