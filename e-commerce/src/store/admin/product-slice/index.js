@@ -28,12 +28,13 @@ const AdminProductsSlice = createSlice({
         state.error = null;
       })
       .addCase(addNewProduct.fulfilled, (state, action) => {
-        console.log("addnew product slice action", action);
-      })
-      .addCase(addNewProduct.rejected, (state, action) => {
-        console.log("addnew product slice rejected:", action);
         state.isLoading = false;
         state.error = null;
+        state.products = action?.payload?.status ? action?.payload?.data : null;
+      })
+      .addCase(addNewProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action?.error?.message;
       });
   },
 });

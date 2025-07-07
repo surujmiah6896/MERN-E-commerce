@@ -1,4 +1,4 @@
-const { sendWithResponse } = require("../../utilities/useHelper");
+const { sendWithResponse, sendWithData } = require("../../utilities/useHelper");
 const Product = require("../../models/Product");
 const productController = {};
 
@@ -33,7 +33,7 @@ productController.addProduct = async(req, res) =>{
       });
 
       await newProduct.save();
-      return sendWithResponse(res, 200, true, "Product Add Successful");
+      return sendWithData(res, 200, true, newProduct, "Product Add Successful");
     }catch(err){
       console.log("add controller error",err);
       

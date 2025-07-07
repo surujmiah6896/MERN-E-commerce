@@ -18,6 +18,7 @@ import CustomForm from "../../components/common/form";
 import ProductImageUpload from "../../components/admin/image-upload";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewProduct } from "../../store/admin/product-slice";
+import useShowToast from "../../hooks/useShowToast";
 
 const initialFormData = {
   image: null,
@@ -40,6 +41,7 @@ const AdminProducts = () => {
   // const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   // const [imageLoadingState, setImageLoadingState] = useState(false);
   const dispatch = useDispatch();
+  const Toast = useShowToast();
 
   const handleClose = () => {
     onClose();
@@ -47,11 +49,14 @@ const AdminProducts = () => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    console.log("products imageFile", imageFile);
-    console.log("form data", formData);
    
     dispatch(addNewProduct({...formData,image:imageFile,})).then((data)=>{
-      console.log("dispatch data show", data);
+      if(data?.payload?.status){
+        onClose();
+        setImageFile(null);
+        setFormData(initialFormData);
+        Toast("Success", "Product Add Successfully");
+      }
     });
   };
 

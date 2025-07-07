@@ -1,7 +1,7 @@
 const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const {sendWithResponse} = require("../../utilities/useHelper");
+const {sendWithResponse, sendWithData} = require("../../utilities/useHelper");
 
 
 
@@ -24,7 +24,7 @@ authController.registerUser = async(req, res) => {
         });
 
         await newUser.save();
-        sendWithResponse(res, 200, true, "Register Successful");
+        sendWithData(res, 200, true,newUser, "Register Successful");
     }catch(e){
         console.log("e",e);
         sendWithResponse(res, 500, false, "some error occured");

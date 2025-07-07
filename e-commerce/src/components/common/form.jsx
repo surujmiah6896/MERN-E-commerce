@@ -34,31 +34,24 @@ function CustomForm({
       case "select":
         element = (
           <Select
-            onValueChange={(value) =>{
-              console.log("select value", value)
-              
-            return  setFormData({
+            placeholder={getControlItem.label}
+            onChange={(e) =>
+              setFormData({
                 ...formData,
-                [getControlItem.name]: value,
-              })}
+                [getControlItem.name]: e.target.value,
+              })
             }
             value={value}
           >
-            {/* <SelectTrigger className="w-full">
-              <SelectValue placeholder={getControlItem.label} />
-            </SelectTrigger> */}
-            {/* <SelectContent> */}
-              {getControlItem.options && getControlItem.options.length > 0
-                ? getControlItem.options.map((optionItem) => (
-                    <option key={optionItem.id} value={optionItem.id}>
-                      {optionItem.label}
-                    </option>
-                  ))
-                : null}
-            {/* </SelectContent> */}
+            {getControlItem.options && getControlItem.options.length > 0
+              ? getControlItem.options.map((optionItem) => (
+                  <option key={optionItem.id} value={optionItem.id}>
+                    {optionItem.label}
+                  </option>
+                ))
+              : null}
           </Select>
         );
-
         break;
       case "textarea":
         element = (
