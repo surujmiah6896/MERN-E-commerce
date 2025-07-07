@@ -41,6 +41,17 @@ const ProductImageUpload = ({
         inputRef.current.value = "";
       }
     }
+
+    const handleDragOver = (event) => {
+      event.preventDefault();
+    }
+
+    const handleDrop = (event) => {
+      event.preventDefault();
+      const droppedFile = event.dataTransfer.files?.[0];
+      if(droppedFile) setImageFile(droppedFile);
+    }
+
   return (
     <Box
       w="full"
@@ -52,8 +63,8 @@ const ProductImageUpload = ({
         Upload Image
       </FormLabel>
       <Box
-        // onDragOver={handleDragOver}
-        // onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
         borderWidth="2px"
         borderStyle="dashed"
         borderRadius="lg"
