@@ -1,38 +1,43 @@
-const { sendWithResponse } = require("../../Helpers");
+const { sendWithResponse } = require("../../utilities/useHelper");
 const Product = require("../../models/Product");
 const productController = {};
 
 //add product
 productController.addProduct = async(req, res) =>{
     try{
-        const {
-          image,
-          title,
-          description,
-          category,
-          brand,
-          price,
-          salePrice,
-          totalStock,
-          averageReview,
-        } = req.body;
+      // Extract image filename from uploaded file (req.files[0])
+      const uploadedFile =
+        req.files && req.files.length > 0 ? req.files[0].filename : null;
 
-        const newProduct = new Product({
-            image,
-            title,
-            description,
-            category,
-            brand,
-            price,
-            salePrice,
-            totalStock,
-            averageReview,
-          });
+      const {
+        title,
+        description,
+        category,
+        brand,
+        price,
+        salePrice,
+        totalStock,
+        averageReview,
+      } = req.body;
 
-          await newProduct.save();
-          return sendWithResponse(res, 200, true, "Product Add Successful");
+      const newProduct = new Product({
+        title,
+        description,
+        image: uploadedFile,
+        category,
+        brand,
+        price,
+        salePrice,
+        totalStock,
+        averageReview,
+      });
+
+      await newProduct.save();
+      return sendWithResponse(res, 200, true, "Product Add Successful");
     }catch(err){
-        return sendWithResponse(res, 500, false, "Some Error occured");
+      console.log("add controller error",err);
+      
+        return sendWithResponse(res, 500, false, err);
     }
 }
 

@@ -4,7 +4,7 @@ const {
   loginUser,
   logoutUser,
 } = require("../../controllers/auth/authController");
-const { sendWithData } = require('../../Helpers');
+const { sendWithData } = require("../../Helpers/index");
 const authCheckMiddleware = require("../../Middleware/authCheckMiddleware");
 
 const router = express.Router();

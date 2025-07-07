@@ -1,5 +1,4 @@
-import { sendWithResponse } from "../Helpers";
-import useSingleUploader from "../utilities/useSingleUploader";
+const  useSingleUploader  = require("../utilities/useSingleUploader");
 
 const avatarCheckMiddleware = (req, res, next) => {
     const upload = useSingleUploader(
@@ -13,7 +12,7 @@ const avatarCheckMiddleware = (req, res, next) => {
 
     upload.any()(req, res, (err)=>{
         if(err){
-            res.status(500).json({
+          return  res.status(400).json({
               errors: {
                 avatar: {
                   msg: err.message,
@@ -27,4 +26,4 @@ const avatarCheckMiddleware = (req, res, next) => {
   
 }
 
-export default avatarCheckMiddleware;
+module.exports = avatarCheckMiddleware;

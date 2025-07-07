@@ -34,11 +34,13 @@ function CustomForm({
       case "select":
         element = (
           <Select
-            onValueChange={(value) =>
-              setFormData({
+            onValueChange={(value) =>{
+              console.log("select value", value)
+              
+            return  setFormData({
                 ...formData,
                 [getControlItem.name]: value,
-              })
+              })}
             }
             value={value}
           >

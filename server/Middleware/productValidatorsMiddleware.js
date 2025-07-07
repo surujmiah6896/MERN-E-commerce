@@ -6,28 +6,10 @@ const { unlink, read } = require("fs");
 
 
 const addProductsValidators = [
-  check("title")
-    .isLength({ min: 1 })
-    .withMessage("Title is required")
-    .isAlpha("en-US", { ignore: " -" })
-    .withMessage("Title must not contain anything other than alphabet")
-    .trim(),
-  check("category")
-    .isLength({ min: 1 })
-    .withMessage("category is required")
-    .isAlpha("en-US", { ignore: " -" })
-    .withMessage("category must not contain anything other than alphabet")
-    .trim(),
+  check("title").notEmpty().withMessage("Title is required"),
   check("price")
-    .isNumeric()
-    .isLength({ min: 1 })
-    .default(0)
-    .withMessage("Price us required"),
-  check("salePrice")
-    .isNumeric()
-    .isLength({ min: 1 })
-    .default(0)
-    .withMessage("Price us required"),
+    .isFloat({ gt: 0 })
+    .withMessage("Price must be a number greater than zero"),
 ];
 
 
@@ -38,7 +20,7 @@ const productValidatorsMiddleware = (req, res, next) => {
         next();
     }else{
         //remove uploaded files
-        if(req.files.length > 0){
+        if(req?.files?.length > 0){
             const {filename} = req.files[0];
             unlink(
               path.join(__dirname, `/../public/uploads/products/${filename}`),(err)=>{
@@ -53,4 +35,4 @@ const productValidatorsMiddleware = (req, res, next) => {
   
 };
 
-export default { addProductsValidators, productValidatorsMiddleware };
+module.exports = { addProductsValidators, productValidatorsMiddleware };

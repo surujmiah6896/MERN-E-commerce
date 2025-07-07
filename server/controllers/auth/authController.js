@@ -1,7 +1,7 @@
 const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const {sendWithResponse} = require('../../Helpers/index');
+const {sendWithResponse} = require("../../utilities/useHelper");
 
 
 

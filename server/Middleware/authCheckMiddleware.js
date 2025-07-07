@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { sendWithResponse } = require("../Helpers");
+const { sendWithResponse } = require("../utilities/useHelper");
 
 const authCheckMiddleware = async (req, res, next) => {
   const token = req.cookies.token;

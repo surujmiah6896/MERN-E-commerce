@@ -15,10 +15,10 @@ import { useRef } from "react";
 const ProductImageUpload = ({
   imageFile,
   setImageFile,
-  imageLoadingState,
-  uploadedImageUrl,
-  setUploadedImageUrl,
-  setImageLoadingState,
+  // imageLoadingState,
+  // uploadedImageUrl,
+  // setUploadedImageUrl,
+  // setImageLoadingState,
   isEditMode,
   isCustomStyling = false,
 }) => {
@@ -93,8 +93,6 @@ const ProductImageUpload = ({
             <UploadCloud size={40} color={uploadColor} />
             <Text mt={2}>Drag & drop or click to upload image</Text>
           </FormLabel>
-        ) : imageLoadingState ? (
-          <Skeleton height="2.5rem" />
         ) : (
           <Box
             display="flex"

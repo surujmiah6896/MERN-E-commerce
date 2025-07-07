@@ -58,4 +58,4 @@ const useMultipleUploader = (
   return update;
 };
 
-export default useMultipleUploader;
+module.exports = useMultipleUploader;

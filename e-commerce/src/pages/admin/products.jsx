@@ -16,6 +16,8 @@ import { Fragment, useState } from "react";
 import {addProductFormElements} from "../../config/index";
 import CustomForm from "../../components/common/form";
 import ProductImageUpload from "../../components/admin/image-upload";
+import { useDispatch, useSelector } from "react-redux";
+import { addNewProduct } from "../../store/admin/product-slice";
 
 const initialFormData = {
   image: null,
@@ -35,17 +37,24 @@ const AdminProducts = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [currentEditedId, setCurrentEditedId] = useState(null);
   const [imageFile, setImageFile] = useState(null);
-  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
-  const [imageLoadingState, setImageLoadingState] = useState(false);
+  // const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+  // const [imageLoadingState, setImageLoadingState] = useState(false);
+  const dispatch = useDispatch();
 
   const handleClose = () => {
     onClose();
   };
-  
+
   const onSubmit = async (event) => {
     event.preventDefault();
     console.log("products imageFile", imageFile);
+    console.log("form data", formData);
+   
+    dispatch(addNewProduct({...formData,image:imageFile,})).then((data)=>{
+      console.log("dispatch data show", data);
+    });
   };
+
   return (
     <Fragment>
       {/* Add Product Button */}
@@ -82,10 +91,10 @@ const AdminProducts = () => {
             <ProductImageUpload
               imageFile={imageFile}
               setImageFile={setImageFile}
-              uploadedImageUrl={uploadedImageUrl}
-              setUploadedImageUrl={setUploadedImageUrl}
-              setImageLoadingState={setImageLoadingState}
-              imageLoadingState={imageLoadingState}
+              // setUploadedImageUrl={setUploadedImageUrl}
+              // uploadedImageUrl={uploadedImageUrl}
+              // setImageLoadingState={setImageLoadingState}
+              // imageLoadingState={imageLoadingState}
               isEditMode={currentEditedId !== null}
             />
             <Box py={6}>
