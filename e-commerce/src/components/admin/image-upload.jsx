@@ -59,7 +59,13 @@ const ProductImageUpload = ({
       maxW={isCustomStyling ? "none" : "md"}
       mx={isCustomStyling ? "0" : "auto"}
     >
-      <FormLabel fontSize="lg" fontWeight="semibold" mb={2}>
+      <FormLabel
+        fontSize="lg"
+        color={"blackAlpha.500"}
+        p={2}
+        fontWeight="semibold"
+        mb={2}
+      >
         Upload Image
       </FormLabel>
       <Box
@@ -69,6 +75,8 @@ const ProductImageUpload = ({
         borderStyle="dashed"
         borderRadius="lg"
         p={4}
+        border={"2px"}
+        borderColor={"blackAlpha.300"}
         opacity={isEditMode ? 0.6 : 1}
       >
         <Input
