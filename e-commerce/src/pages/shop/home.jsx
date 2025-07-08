@@ -34,6 +34,8 @@ import { useNavigate } from "react-router-dom";
 // import ProductDetailsDialog from "./ProductDetailsDialog";
 // import ShoppingProductTile from "./ShoppingProductTile";
 import useShowToast from "../../hooks/useShowToast";
+import { getFeatureImages } from "../../store/feature-slice";
+
 
 const categoriesWithIcon = [
   { id: "men", label: "Men", icon: ShirtIcon },
@@ -55,12 +57,19 @@ const brandsWithIcon = [
 function ShoppingHome() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
-
+  const { featureImages } = useSelector((state) => state.feature);
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
   const Toast = useShowToast();
 
 
+  console.log(featureImages);
+  
+  
+    useEffect(() => {
+      dispatch(getFeatureImages());
+    }, [dispatch]);
   const handleNavigateToListingPage = (item, section) => {
     console.log("navigate to listing page");
     
@@ -79,16 +88,21 @@ function ShoppingHome() {
     <Flex direction="column" minH="100vh">
       {/* Hero Carousel */}
       <Box pos="relative" w="full" h="600px" overflow="hidden">
-          <Image
-            src=""
-            alt={`slide-id}`}
-            objectFit="cover"
-            position="absolute"
-            w="full"
-            h="full"
-            // opacity={index === currentSlide ? 1 : 0}
-            transition="opacity 1s ease-in-out"
-          />
+        {featureImages && featureImages.length > 0
+          ? featureImages.map((slider, index) => (
+              <Image
+                src={`http://localhost:5000/uploads/features/${slider.image}`}
+                alt={`slider-${slider._id}`}
+                objectFit="cover"
+                position="absolute"
+                w="full"
+                h="full"
+                opacity={index === currentSlide ? 1 : 0}
+                transition="opacity 1s ease-in-out"
+              />
+            ))
+          : null}
+
         <Button
           variant="ghost"
           position="absolute"
@@ -96,7 +110,12 @@ function ShoppingHome() {
           left="4"
           transform="translateY(-50%)"
           bg="whiteAlpha.700"
-          
+          onClick={() =>
+            setCurrentSlide(
+              (prevSlide) =>
+                (prevSlide - 1 + featureImages.length) % featureImages.length
+            )
+          }
         >
           <ChevronLeftIcon boxSize={6} />
         </Button>
@@ -107,7 +126,11 @@ function ShoppingHome() {
           right="4"
           transform="translateY(-50%)"
           bg="whiteAlpha.700"
-         
+          onClick={() =>
+            setCurrentSlide(
+              (prevSlide) => (prevSlide + 1) % featureImages.length
+            )
+          }
         >
           <ChevronRightIcon boxSize={6} />
         </Button>
