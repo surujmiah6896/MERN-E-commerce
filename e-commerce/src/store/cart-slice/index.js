@@ -27,7 +27,15 @@ const shoppingCartSlice = createSlice({
     initialState,
     reducers:{},
     extraReducers:(builder) => {
-
+        builder.addCase(addToCart.pending, (state)=>{
+            state.isLoading = true;
+        }).addCase(addToCart.fulfilled, (state, action) =>{
+            state.isLoading = false;
+            state.cartItems = action?.payload?.status ? action?.payload?.data : null;
+        }).addCase(addToCart.rejected, (state, action)=>{
+            state.isLoading = false;
+            state.error= action?.payload?.error?.message;
+        });
     }
 });
 
