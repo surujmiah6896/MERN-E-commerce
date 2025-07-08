@@ -86,12 +86,10 @@ productController.deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const product = await Product.findByIdAndDelete(id);
-
     if (!product) {
       return sendWithResponse(res, 404, false, "Product not found");
     }
-
-    return sendWithResponse(res, 200, true, "Product delete successfully");
+    return sendWithData(res, 200, true, product, "Product delete successfully");
   } catch (e) {
     console.log(e);
     return sendWithResponse(res, 500, false, "Some Error Occured");

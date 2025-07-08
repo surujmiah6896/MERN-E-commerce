@@ -1,6 +1,6 @@
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addProduct, getProducts } from "../../api/productApi";
+import { addProduct, getProducts, productDelete } from "../../api/productApi";
 
 
 const initialState = {
@@ -25,11 +25,13 @@ export const addNewProduct = createAsyncThunk(
     }
 );
 
-export const getAllProducts = createAsyncThunk(
-  "/product/getAllProducts",
-  async (formData = null, { rejectWithValue }) => {
+
+
+export const deleteProduct = createAsyncThunk(
+  "product/delete",
+  async (id, { rejectWithValue }) => {
     try {
-      const response = await getProducts();
+      const response = await productDelete(id);
       return response.data;
     } catch (err) {
       if (err.response && err.response.data) {
@@ -72,7 +74,8 @@ const AdminProductsSlice = createSlice({
       .addCase(getAllProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action?.error?.message;
-      });
+      })
+ 
   },
 });
 

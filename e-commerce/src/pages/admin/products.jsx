@@ -17,7 +17,7 @@ import {addProductFormElements} from "../../config/index";
 import CustomForm from "../../components/common/form";
 import ProductImageUpload from "../../components/admin/image-upload";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewProduct, getAllProducts } from "../../store/admin/product-slice";
+import { addNewProduct, deleteProduct, getAllProducts } from "../../store/admin/product-slice";
 import useShowToast from "../../hooks/useShowToast";
 import AdminProductList from "../../components/admin/product-list";
 
@@ -41,7 +41,7 @@ const AdminProducts = () => {
   const [imageFile, setImageFile] = useState(null);
   // const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   // const [imageLoadingState, setImageLoadingState] = useState(false);
-  const { error, isLoding, products}  = useSelector((state) => state.adminProducts);
+  const { products}  = useSelector((state) => state.adminProducts);
   const dispatch = useDispatch();
   const Toast = useShowToast();
 
@@ -64,15 +64,28 @@ const AdminProducts = () => {
           Toast("Success", "Product Add Successfully", "success");
         }
       } catch (error) {
-        console.error("Register Error:", error);
+        console.error("Add new Product Error:", error);
         const errorMsg =
           error?.message || error?.errors?.avatar?.msg || "Something went wrong";
         Toast("Error", errorMsg, "error");
       }
   };
 
-  const handleDelete = async () => {
-
+  const handleDelete = async (product_id) => {
+    try {
+      const data = dispatch(deleteProduct(product_id)).unwrap();
+      console.log("delete data", data);
+      
+      // if (data?.status) {
+        dispatch(getAllProducts());
+        Toast("Success", "Product Delete Successfully", "success");
+      // }
+    } catch (error) {
+      console.error("Product delete Error:", error);
+      const errorMsg =
+        error?.message || error?.errors?.avatar?.msg || "Something went wrong";
+      Toast("Error", errorMsg, "error");
+    }
   }
 
   useEffect(() => {

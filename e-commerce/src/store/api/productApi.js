@@ -21,3 +21,11 @@ export const getProducts = async () => {
   
   return response;
 };
+
+//delete product
+export const productDelete = async(id)=>{
+  const response = await axios.delete(
+    `http://localhost:5000/api/admin/products/delete/${id}`
+  );
+  return response;
+}
