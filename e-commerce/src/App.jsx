@@ -43,7 +43,20 @@ function App() {
           <Route path="register" element={<AuthRegister />}></Route>
         </Route>
         {/* admin */}
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route
+          path="/admin"
+          element={
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+              <AdminLayout />
+            </CheckAuth>
+          }
+        >
+          <Route path="dashboard" element={<AdminDashboard />}></Route>
+          <Route path="products" element={<AdminProducts />}></Route>
+        </Route>
+
+        {/* shop */}
+        <Route path="/shop" element={<AdminLayout />}>
           <Route path="dashboard" element={<AdminDashboard />}></Route>
           <Route path="products" element={<AdminProducts />}></Route>
         </Route>

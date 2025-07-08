@@ -39,8 +39,6 @@ const AdminProducts = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [currentEditedId, setCurrentEditedId] = useState(null);
   const [imageFile, setImageFile] = useState(null);
-  // const [uploadedImageUrl, setUploadedImageUrl] = useState("");
-  // const [imageLoadingState, setImageLoadingState] = useState(false);
   const { products}  = useSelector((state) => state.adminProducts);
   const dispatch = useDispatch();
   const Toast = useShowToast();

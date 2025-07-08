@@ -6,9 +6,27 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { AlignJustify, LogOut } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../../store/auth-slice";
+import useShowToast from "../../hooks/useShowToast";
 
-const AdminHeader = ({ setOpen, handleLogout }) => {
+const AdminHeader = ({ setOpen }) => {
   const isMobile = useBreakpointValue({ base: true, lg: false });
+  const dispatch = useDispatch();
+  const Toast = useShowToast();
+  const handleLogout = ()=>{
+    try{
+      const data = dispatch(logoutUser()).unwrap();
+      if (data?.status) {
+            Toast("Success", "Logged out Successfully", "success");
+      }
+    } catch (error) {
+      console.error("Logged out Error:", error);
+      const errorMsg =
+        error?.message || error?.errors?.avatar?.msg || "Something went wrong";
+      Toast("Error", errorMsg, "error");
+    }
+  }
 
   return (
     <Box
