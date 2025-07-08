@@ -13,7 +13,13 @@ const router = express.Router();
 
 //first image upload
 router.post("/add", avatarUpload, addProductsValidators, productValidatorsMiddleware, addProduct);
-router.put("/edit/:id", editProduct);
+router.put(
+  "/edit/:id",
+  avatarUpload,
+  addProductsValidators,
+  productValidatorsMiddleware,
+  editProduct
+);
 router.delete("/delete/:id", deleteProduct);
 router.get("/all", getAllProduct)
 

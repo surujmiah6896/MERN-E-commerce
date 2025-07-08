@@ -17,7 +17,7 @@ import {addProductFormElements} from "../../config/index";
 import CustomForm from "../../components/common/form";
 import ProductImageUpload from "../../components/admin/image-upload";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewProduct, deleteProduct, getAllProducts } from "../../store/admin/product-slice";
+import { addNewProduct, deleteProduct, editProduct, getAllProducts } from "../../store/admin/product-slice";
 import useShowToast from "../../hooks/useShowToast";
 import AdminProductList from "../../components/admin/product-list";
 
@@ -45,9 +45,6 @@ const AdminProducts = () => {
   const dispatch = useDispatch();
   const Toast = useShowToast();
 
-  console.log("productList", products);
-  
-
   const handleClose = () => {
     onClose();
   };
@@ -64,7 +61,7 @@ const AdminProducts = () => {
   const productEdit = async () => {
     console.log("product edit");
     try {
-      const data = await dispatch(editProduct(currentEditedId));
+      const data = await dispatch(editProduct({ id: currentEditedId, data: { ...formData, image: imageFile } }));
     } catch (error) {
       console.error("Add new Product Error:", error);
       const errorMsg =

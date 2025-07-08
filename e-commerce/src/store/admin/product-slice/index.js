@@ -1,6 +1,6 @@
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addProduct, getProducts, productDelete } from "../../api/productApi";
+import { addProduct, getProducts, productDelete, productEdit } from "../../api/productApi";
 
 
 const initialState = {
@@ -27,10 +27,19 @@ export const addNewProduct = createAsyncThunk(
 
 export const editProduct = createAsyncThunk(
   "product/edit",
-  async (id) => {
-    const response = await productEdit(id);
+  async ({ id, data },  { rejectWithValue }) => {
+    try {
+      const response = await productEdit(id, data);
+      return response.data;
+    } catch (err) {
+      if (err.response && err.response.data) {
+        return rejectWithValue(err.response.data);
+      } else {
+        return rejectWithValue({ message: err.message });
+      }
+    }
   }
-)
+);
 
 export const getAllProducts = createAsyncThunk(
   "/product/getAllProducts",

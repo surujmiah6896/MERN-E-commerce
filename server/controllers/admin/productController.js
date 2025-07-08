@@ -3,7 +3,6 @@ const Product = require("../../models/Product");
 const productController = {};
 const fs = require('fs');
 const path = require("path");
-const {unlink} = fs
 
 //add product
 productController.addProduct = async(req, res) =>{
@@ -44,44 +43,86 @@ productController.addProduct = async(req, res) =>{
 }
 
 //edit product
-productController.editProduct = async(req, res) => {
-    try{
-        const {
-          image,
-          title,
-          description,
-          category,
-          brand,
-          price,
-          salePrice,
-          totalStock,
-          averageReview,
-        } = req.body;
+productController.editProduct = async (req, res) => {
+  try {
+    const {
+      title,
+      description,
+      category,
+      brand,
+      price,
+      salePrice,
+      totalStock,
+      averageReview,
+    } = req.body;
 
-        const id = req.params;
-        const findProduct = Product.findById(id);
-        if (!findProduct) {
-          return sendWithResponse(res, 401, false, "Product not found");
-        }
+    const { id } = req.params;
 
-        findProduct.title = title || findProduct.title;
-        findProduct.description = description || findProduct.description;
-        findProduct.category = category || findProduct.category;
-        findProduct.brand = brand || findProduct.brand;
-        findProduct.price = price === "" ? 0 : price || findProduct.price;
-        findProduct.salePrice =
-          salePrice === "" ? 0 : salePrice || findProduct.salePrice;
-        findProduct.totalStock = totalStock || findProduct.totalStock;
-        findProduct.image = image || findProduct.image;
-        findProduct.averageReview = averageReview || findProduct.averageReview;
-
-        await findProduct.save();
-        return sendWithResponse(res, 200, true, "product update Successfully");
-
-    }catch(err){
-        return sendWithResponse(res, 500, false, "some server error");
+    const findProduct = await Product.findById(id);
+    if (!findProduct) {
+      return sendWithResponse(res, 404, false, "Product not found");
     }
-    
+    // If a new image is provided and it's different, delete the old one
+    // if (image && image !== findProduct.image) {
+    //   const oldImagePath = path.join(
+    //     __dirname,
+    //     "../../public/uploads/products",
+    //     findProduct.image
+    //   );
+
+    //   if (fs.existsSync(oldImagePath)) {
+    //     fs.unlink(oldImagePath, (err) => {
+    //       if (err) {
+    //         console.error("Failed to delete old image:", err);
+    //       } else {
+    //         console.log("Old product image deleted");
+    //       }
+    //     });
+    //   }
+
+    //   findProduct.image = image;
+    // }
+
+    // Normalize price and salePrice values
+    // const normalize = (value) => (value === "" ? 0 : value);
+
+    // // Dynamically update provided fields
+    // const updatedFields = {
+    //   title,
+    //   description,
+    //   category,
+    //   brand,
+    //   price: normalize(price),
+    //   salePrice: normalize(salePrice),
+    //   totalStock,
+    //   averageReview,
+    // };
+
+    // Object.keys(updatedFields).forEach(
+    //   (key) => updatedFields[key] === undefined && delete updatedFields[key]
+    // );
+
+    // Object.assign(findProduct, updatedFields);
+
+    // have other way for   // Update other fields
+    findProduct.title = title || findProduct.title;
+    findProduct.description = description || findProduct.description;
+    findProduct.category = category || findProduct.category;
+    findProduct.brand = brand || findProduct.brand;
+    findProduct.price = price === "" ? 0 : price || findProduct.price;
+    findProduct.salePrice =
+      salePrice === "" ? 0 : salePrice || findProduct.salePrice;
+    findProduct.totalStock = totalStock || findProduct.totalStock;
+    findProduct.averageReview = averageReview || findProduct.averageReview;
+    findProduct.image = findProduct.image;
+
+    await findProduct.save();
+
+    return sendWithResponse(res, 200, true, "Product updated successfully");
+  } catch (err) {
+    console.error("Edit product error:", err);
+    return sendWithResponse(res, 500, false, "Some server error");
+  }
 };
 
 //delete a product
