@@ -9,12 +9,27 @@ const initialState = {
 
 export const addFeatureImage = createAsyncThunk(
   "/order/addFeatureImage",
-  async (image) => {
-    const response = await axios.post(
-      `http://localhost:5000/api/feature/add`,
-      { image }
-    );
-    return response.data;
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/api/feature/add`,
+         formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      console.log(err);
+      
+      if (err.response && err.response.data) {
+        return rejectWithValue(err.response.data);
+      } else {
+        return rejectWithValue({ message: err.message });
+      }
+    }
   }
 );
 
@@ -39,12 +54,15 @@ const featureSlice = createSlice({
             state.isLoading = true;
           })
           .addCase(addFeatureImage.fulfilled, (state, action) => {
+            console.log("add feature fil", action);
+            
             state.isLoading = false;
             state.featureImages = action?.payload?.status
               ? action?.payload?.data
               : null;
           })
           .addCase(addFeatureImage.rejected, (state, action) => {
+            console.log("add feature rej", action);
             state.isLoading = false;
             state.error = action?.payload?.error;
           })

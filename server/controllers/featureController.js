@@ -4,17 +4,20 @@ const Feature = require("../models/Feature");
 const featureController = {};
 
 featureController.addFeatureImage = async(req, res)=>{
-    try {
-      const { image } = req.body;
-      const featureImages = new Feature({
-        image,
-      });
-      const newfeature = await featureImages.save();
-      return sendWithData(res, 201, true, newfeature, "Feature Add Successfully");
-    } catch (e) {
-      console.log(e);
-      return sendWithResponse(res, 500, false, "Some error occured!");
-    }
+   
+  try {
+    const uploadedFile =
+      req.files && req.files.length > 0 ? req.files[0].filename : null;
+
+    const featureImages = new Feature({
+      image: uploadedFile,
+    });
+    const newfeature = await featureImages.save();
+    return sendWithData(res, 201, true, newfeature, "Feature Add Successfully");
+  } catch (e) {
+    console.log(e);
+    return sendWithResponse(res, 500, false, "Some error occured!");
+  }
 };
 
 featureController.getFeatureImages = async (req, res) => {
