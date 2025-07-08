@@ -61,7 +61,21 @@ const AdminProducts = () => {
   const productEdit = async () => {
     console.log("product edit");
     try {
-      const data = await dispatch(editProduct({ id: currentEditedId, data: { ...formData, image: imageFile } }));
+      const data = await dispatch(
+        editProduct({
+          id: currentEditedId,
+          data: { ...formData, image: imageFile },
+        })
+      ).unwrap();
+      console.log("product edit dispatch", data);
+
+      if (data?.status) {
+        dispatch(getAllProducts());
+        onClose();
+        setImageFile(null);
+        setFormData(initialFormData);
+        Toast("Success", "Product Update Successfully", "success");
+      }
     } catch (error) {
       console.error("Add new Product Error:", error);
       const errorMsg =

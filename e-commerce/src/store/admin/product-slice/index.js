@@ -110,6 +110,8 @@ const AdminProductsSlice = createSlice({
         state.error = null;
       })
       .addCase(editProduct.fulfilled, (state, action) => {
+        console.log("product edit slice ful", action);
+        
         state.isLoading = false;
         state.error = null;
         state.products = action?.payload?.status ? action?.payload?.data : null;
