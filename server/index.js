@@ -55,6 +55,8 @@ app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", authProductsRouter);
 
+app.use("/api/feature", featureRouter);
+
 const port = process.env.PORT || 5000;
 app.listen(port, ()=>{
   console.log(`Server is running on port ${port}`);
