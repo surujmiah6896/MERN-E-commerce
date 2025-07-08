@@ -19,6 +19,7 @@ const authRouter = require('./routes/auth/authRoutes');
 const authProductsRouter = require("./routes/admin/products-routes");
 const featureRouter = require("./routes/feature-routes");
 const shopProductsRouter = require("./routes/shop/products-routes");
+const shopCartRouter= require("./routes/shop/cart-routes");
 //init app
 const app = express();
 dotenv.config();
