@@ -146,7 +146,7 @@ function HeaderRightContent() {
           <Avatar bg="black" color="white">
             {/* <Avatar.Fallback>
             </Avatar.Fallback> */}
-              {user?.userName?.charAt(0).toUpperCase() || "U"}
+              {/* {user?.userName?.charAt(0).toUpperCase() || "U"} */}
           </Avatar>
         </MenuButton>
         <MenuList>

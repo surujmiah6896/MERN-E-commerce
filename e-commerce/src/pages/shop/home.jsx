@@ -1,0 +1,199 @@
+import {
+  Box,
+  Flex,
+  Button,
+  Image,
+  Heading,
+  SimpleGrid,
+  Container,
+  Icon,
+} from "@chakra-ui/react";
+import {
+  Airplay,
+  BabyIcon,
+  CloudLightning,
+  Heater,
+  Images,
+  Shirt,
+  ShirtIcon,
+  ShoppingBasket,
+  UmbrellaIcon,
+  WashingMachine,
+  WatchIcon,
+} from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+// import {
+//   fetchAllFilteredProducts,
+//   fetchProductDetails,
+// } from "@/redux/slices/shopProductsSlice";
+// import { getFeatureImages } from "@/redux/slices/commonSlice";
+// import { addToCart, fetchCartItems } from "@/redux/slices/shopCartSlice";
+// import ProductDetailsDialog from "./ProductDetailsDialog";
+// import ShoppingProductTile from "./ShoppingProductTile";
+import useShowToast from "../../hooks/useShowToast";
+
+const categoriesWithIcon = [
+  { id: "men", label: "Men", icon: ShirtIcon },
+  { id: "women", label: "Women", icon: CloudLightning },
+  { id: "kids", label: "Kids", icon: BabyIcon },
+  { id: "accessories", label: "Accessories", icon: WatchIcon },
+  { id: "footwear", label: "Footwear", icon: UmbrellaIcon },
+];
+
+const brandsWithIcon = [
+  { id: "nike", label: "Nike", icon: Shirt },
+  { id: "adidas", label: "Adidas", icon: WashingMachine },
+  { id: "puma", label: "Puma", icon: ShoppingBasket },
+  { id: "levi", label: "Levi's", icon: Airplay },
+  { id: "zara", label: "Zara", icon: Images },
+  { id: "h&m", label: "H&M", icon: Heater },
+];
+
+function ShoppingHome() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+
+  const { user } = useSelector((state) => state.auth);
+
+  const Toast = useShowToast();
+
+
+  const handleNavigateToListingPage = (item, section) => {
+    console.log("navigate to listing page");
+    
+  };
+
+  const handleGetProductDetails = (productId) => {
+    console.log("get product details", productId);
+  };
+
+  const handleAddtoCart = (productId) => {
+    console.log("add to cart", productId);
+    
+  };
+
+  return (
+    <Flex direction="column" minH="100vh">
+      {/* Hero Carousel */}
+      <Box pos="relative" w="full" h="600px" overflow="hidden">
+          <Image
+            src=""
+            alt={`slide-id}`}
+            objectFit="cover"
+            position="absolute"
+            w="full"
+            h="full"
+            // opacity={index === currentSlide ? 1 : 0}
+            transition="opacity 1s ease-in-out"
+          />
+        <Button
+          variant="ghost"
+          position="absolute"
+          top="50%"
+          left="4"
+          transform="translateY(-50%)"
+          bg="whiteAlpha.700"
+          
+        >
+          <ChevronLeftIcon boxSize={6} />
+        </Button>
+        <Button
+          variant="ghost"
+          position="absolute"
+          top="50%"
+          right="4"
+          transform="translateY(-50%)"
+          bg="whiteAlpha.700"
+         
+        >
+          <ChevronRightIcon boxSize={6} />
+        </Button>
+      </Box>
+
+      {/* Categories */}
+      <Box py="12" bg="gray.50">
+        <Container maxW="7xl">
+          <Heading as="h2" size="xl" textAlign="center" mb="8">
+            Shop by Category
+          </Heading>
+          <SimpleGrid columns={{ base: 2, md: 3, lg: 5 }} spacing={4}>
+            {categoriesWithIcon.map((item) => (
+              <Box
+                key={item.id}
+                p={6}
+                textAlign="center"
+                borderRadius="md"
+                boxShadow="md"
+                bg="white"
+                cursor="pointer"
+                _hover={{ shadow: "lg" }}
+                onClick={() => handleNavigateToListingPage(item, "category")}
+              >
+                <Icon as={item.icon} boxSize={12} mb={4} color="blue.500" />
+                <Box fontWeight="bold">{item.label}</Box>
+              </Box>
+            ))}
+          </SimpleGrid>
+        </Container>
+      </Box>
+
+      {/* Brands */}
+      <Box py="12" bg="gray.50">
+        <Container maxW="7xl">
+          <Heading as="h2" size="xl" textAlign="center" mb="8">
+            Shop by Brand
+          </Heading>
+          <SimpleGrid columns={{ base: 2, md: 3, lg: 6 }} spacing={4}>
+            {brandsWithIcon.map((item) => (
+              <Box
+                key={item.id}
+                p={6}
+                textAlign="center"
+                borderRadius="md"
+                boxShadow="md"
+                bg="white"
+                cursor="pointer"
+                _hover={{ shadow: "lg" }}
+                onClick={() => handleNavigateToListingPage(item, "brand")}
+              >
+                <Icon as={item.icon} boxSize={12} mb={4} color="green.500" />
+                <Box fontWeight="bold">{item.label}</Box>
+              </Box>
+            ))}
+          </SimpleGrid>
+        </Container>
+      </Box>
+
+      {/* Feature Products */}
+      <Box py="12">
+        <Container maxW="7xl">
+          <Heading as="h2" size="xl" textAlign="center" mb="8">
+            Featured Products
+          </Heading>
+          <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6}>
+            {/* {productList?.map((product) => (
+              <ShoppingProductTile
+                key={product._id}
+                product={product}
+                handleGetProductDetails={handleGetProductDetails}
+                handleAddtoCart={handleAddtoCart}
+              />
+            ))} */}
+          </SimpleGrid>
+        </Container>
+      </Box>
+
+      {/* Product Details Dialog */}
+      {/* <ProductDetailsDialog
+        open={openDetailsDialog}
+        setOpen={setOpenDetailsDialog}
+        productDetails={productDetails}
+      /> */}
+    </Flex>
+  );
+}
+
+export default ShoppingHome;

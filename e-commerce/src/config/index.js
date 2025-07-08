@@ -147,3 +147,5 @@ export const shoppingViewHeaderMenuItems = [
     path: "/shop/search",
   },
 ];
+
+
