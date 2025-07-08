@@ -116,9 +116,10 @@ productController.editProduct = async (req, res) => {
     findProduct.averageReview = averageReview || findProduct.averageReview;
     findProduct.image = findProduct.image;
 
-    await findProduct.save();
+    //update product
+    const update_product =  await findProduct.save();
 
-    return sendWithResponse(res, 200, true, "Product updated successfully");
+    return sendWithResponse(res, 200, true, update_product, "Product updated successfully");
   } catch (err) {
     console.error("Edit product error:", err);
     return sendWithResponse(res, 500, false, "Some server error");

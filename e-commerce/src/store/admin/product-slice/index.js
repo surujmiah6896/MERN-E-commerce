@@ -105,6 +105,19 @@ const AdminProductsSlice = createSlice({
         state.isLoading = false;
         state.error = action?.error?.message;
       })
+      .addCase(editProduct.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(editProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.products = action?.payload?.status ? action?.payload?.data : null;
+      })
+      .addCase(editProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action?.error?.message;
+      })
       .addCase(deleteProduct.pending, (state) => {
         state.isLoading = true;
         state.error = null;
