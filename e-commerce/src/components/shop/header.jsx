@@ -29,6 +29,56 @@ import { shoppingViewHeaderMenuItems } from "../../config";
 // import { logoutUser, fetchCartItems } from "@/redux/actions"; // Adjust imports
 // import UserCartWrapper from "./UserCartWrapper"; // Assuming it's a Chakra-compatible component
 
+//menu item
+function MenuItems() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  function handleNavigate(getCurrentMenuItem) {
+    sessionStorage.removeItem("filters");
+
+    const currentFilter =
+      getCurrentMenuItem.id !== "home" &&
+      getCurrentMenuItem.id !== "products" &&
+      getCurrentMenuItem.id !== "search"
+        ? { category: [getCurrentMenuItem.id] }
+        : null;
+
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+
+    if (location.pathname.includes("listing") && currentFilter !== null) {
+      setSearchParams(
+        new URLSearchParams(`?category=${getCurrentMenuItem.id}`)
+      );
+    } else {
+      navigate(getCurrentMenuItem.path);
+    }
+  }
+
+  return (
+    <Flex
+      direction={{ base: "column", lg: "row" }}
+      gap={6}
+      align={{ lg: "center" }}
+      mb={{ base: 3, lg: 0 }}
+    >
+      {shoppingViewHeaderMenuItems.map((menuItem) => (
+        <Text
+          key={menuItem.id}
+          fontSize="sm"
+          fontWeight="medium"
+          cursor="pointer"
+          onClick={() => handleNavigate(menuItem)}
+          _hover={{ color: "blue.500" }}
+        >
+          {menuItem.label}
+        </Text>
+      ))}
+    </Flex>
+  );
+}
+
 //Right Content
 function HeaderRightContent() {
   const { user } = useSelector((state) => state.auth);
