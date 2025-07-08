@@ -11,6 +11,7 @@ import CheckAuth from "./components/common/check-auth";
 import AdminLayout from "./components/admin/layout";
 import AdminDashboard from "./pages/admin/dashboard";
 import AdminProducts from "./pages/admin/products";
+import ShoppingLayout from "./components/shop/layout";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -56,7 +57,7 @@ function App() {
         </Route>
 
         {/* shop */}
-        <Route path="/shop" element={<AdminLayout />}>
+        <Route path="/shop" element={<ShoppingLayout />}>
           <Route path="dashboard" element={<AdminDashboard />}></Route>
           <Route path="products" element={<AdminProducts />}></Route>
         </Route>
