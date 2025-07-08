@@ -1,6 +1,9 @@
 const { sendWithResponse, sendWithData } = require("../../utilities/useHelper");
 const Product = require("../../models/Product");
 const productController = {};
+const fs = require('fs');
+const path = require("path");
+const {unlink} = fs
 
 //add product
 productController.addProduct = async(req, res) =>{
@@ -85,11 +88,45 @@ productController.editProduct = async(req, res) => {
 productController.deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await Product.findByIdAndDelete(id);
+
+    // 1. Find the product first to get the image name
+    const product = await Product.findById(id);
+
+    
+
     if (!product) {
       return sendWithResponse(res, 404, false, "Product not found");
     }
-    return sendWithData(res, 200, true, product, "Product delete successfully");
+
+    // 2. Delete the image file if it exists
+    if (product.image) {
+      const imgPath = path.join(
+        __dirname,
+        `../../public/uploads/products/${product.image}`
+      );
+
+      if (fs.existsSync(imgPath)) {
+        fs.unlink(imgPath, (err) => {
+          if (err) {
+            console.error("Failed to delete image:", err);
+          } else {
+            console.log("Image file deleted:", imgPath);
+          }
+        });
+      } else {
+        console.warn("Image file not found:", imgPath);
+      }
+    }
+
+    // 3. Delete the product from the database
+    const delete_product = await Product.findByIdAndDelete(id);
+    return sendWithData(
+      res,
+      200,
+      true,
+      delete_product,
+      "Product delete successfully"
+    );
   } catch (e) {
     console.log(e);
     return sendWithResponse(res, 500, false, "Some Error Occured");
