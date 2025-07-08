@@ -155,8 +155,10 @@ function ShoppingHome() {
                 _hover={{ shadow: "lg" }}
                 onClick={() => handleNavigateToListingPage(item, "category")}
               >
-                <Icon as={item.icon} boxSize={12} mb={4} color="blue.500" />
-                <Box fontWeight="bold">{item.label}</Box>
+                <Icon as={item.icon} boxSize={12} mb={4} color="blackAlpha.500" />
+                <Box color={"blackAlpha.800"} fontWeight="bold">
+                  {item.label}
+                </Box>
               </Box>
             ))}
           </SimpleGrid>
@@ -182,8 +184,10 @@ function ShoppingHome() {
                 _hover={{ shadow: "lg" }}
                 onClick={() => handleNavigateToListingPage(item, "brand")}
               >
-                <Icon as={item.icon} boxSize={12} mb={4} color="green.500" />
-                <Box fontWeight="bold">{item.label}</Box>
+                <Icon as={item.icon} boxSize={12} mb={4} color="blue.500" />
+                <Box color={"blackAlpha.800"} fontWeight="bold">
+                  {item.label}
+                </Box>
               </Box>
             ))}
           </SimpleGrid>

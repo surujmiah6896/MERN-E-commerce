@@ -18,6 +18,7 @@ const cors = require('cors');
 const authRouter = require('./routes/auth/authRoutes');
 const authProductsRouter = require("./routes/admin/products-routes");
 const featureRouter = require("./routes/feature-routes");
+const shopProductsRouter = require("./routes/shop/products-routes");
 //init app
 const app = express();
 dotenv.config();
@@ -55,6 +56,8 @@ app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", authProductsRouter);
+
+app.use("/api/shop/products", shopProductsRouter);
 
 app.use("/api/feature", featureRouter);
 
