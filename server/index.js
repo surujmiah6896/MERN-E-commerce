@@ -58,6 +58,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/admin/products", authProductsRouter);
 
 app.use("/api/shop/products", shopProductsRouter);
+app.use("/api/shop/cart", shopCartRouter);
 
 app.use("/api/feature", featureRouter);
 
