@@ -92,8 +92,6 @@ productController.deleteProduct = async (req, res) => {
     // 1. Find the product first to get the image name
     const product = await Product.findById(id);
 
-    
-
     if (!product) {
       return sendWithResponse(res, 404, false, "Product not found");
     }

@@ -54,22 +54,43 @@ const AdminProducts = () => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-     try {
-        const data = await dispatch(addNewProduct({ ...formData, image: imageFile })).unwrap();
-        if(data?.status){
-          dispatch(getAllProducts());
-          onClose();
-          setImageFile(null);
-          setFormData(initialFormData);
-          Toast("Success", "Product Add Successfully", "success");
-        }
-      } catch (error) {
-        console.error("Add new Product Error:", error);
-        const errorMsg =
-          error?.message || error?.errors?.avatar?.msg || "Something went wrong";
-        Toast("Error", errorMsg, "error");
-      }
+    if(currentEditedId !== null){
+      productEdit();
+    }else{
+      productAdd();
+    }
   };
+
+  const productEdit = async () => {
+    console.log("product edit");
+    try {
+      const data = await dispatch(editProduct(currentEditedId));
+    } catch (error) {
+      console.error("Add new Product Error:", error);
+      const errorMsg =
+        error?.message || error?.errors?.avatar?.msg || "Something went wrong";
+      Toast("Error", errorMsg, "error");
+    }
+
+  }
+
+  const productAdd = async () =>{
+    try {
+      const data = await dispatch(addNewProduct({ ...formData, image: imageFile })).unwrap();
+      if(data?.status){
+        dispatch(getAllProducts());
+        onClose();
+        setImageFile(null);
+        setFormData(initialFormData);
+        Toast("Success", "Product Add Successfully", "success");
+      }
+    } catch (error) {
+      console.error("Add new Product Error:", error);
+      const errorMsg =
+        error?.message || error?.errors?.avatar?.msg || "Something went wrong";
+      Toast("Error", errorMsg, "error");
+    }
+  }
 
   const handleDelete = async (product_id) => {
     try {
@@ -88,6 +109,13 @@ const AdminProducts = () => {
     }
   }
 
+  const handleAddNewProduct = () => {
+    setCurrentEditedId(null);
+    setImageFile(null);
+    setFormData(initialFormData);
+    onOpen(true);
+  }
+
   useEffect(() => {
     dispatch(getAllProducts());
   }, [dispatch]);
@@ -96,7 +124,7 @@ const AdminProducts = () => {
     <Fragment>
       {/* Add Product Button */}
       <Flex mb={5} justify="flex-end" w="full">
-        <Button colorScheme="blue" onClick={onOpen}>
+        <Button colorScheme="blue" onClick={handleAddNewProduct}>
           Add New Product
         </Button>
       </Flex>

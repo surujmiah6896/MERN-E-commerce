@@ -25,6 +25,13 @@ export const addNewProduct = createAsyncThunk(
     }
 );
 
+export const editProduct = createAsyncThunk(
+  "product/edit",
+  async (id) => {
+    const response = await productEdit(id);
+  }
+)
+
 export const getAllProducts = createAsyncThunk(
   "/product/getAllProducts",
   async (formData = null, { rejectWithValue }) => {
