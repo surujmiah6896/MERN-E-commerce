@@ -25,7 +25,21 @@ export const addNewProduct = createAsyncThunk(
     }
 );
 
-
+export const getAllProducts = createAsyncThunk(
+  "/product/getAllProducts",
+  async (formData = null, { rejectWithValue }) => {
+    try {
+      const response = await getProducts();
+      return response.data;
+    } catch (err) {
+      if (err.response && err.response.data) {
+        return rejectWithValue(err.response.data);
+      } else {
+        return rejectWithValue({ message: err.message });
+      }
+    }
+  }
+);
 
 export const deleteProduct = createAsyncThunk(
   "product/delete",
@@ -75,7 +89,22 @@ const AdminProductsSlice = createSlice({
         state.isLoading = false;
         state.error = action?.error?.message;
       })
- 
+      .addCase(deleteProduct.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        const { status, data } = action.payload || {};
+        if (status && data) {
+          state.products = state.products.filter((p) => p._id !== data._id);
+        }
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action?.error?.message;
+      });
   },
 });
 
