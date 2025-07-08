@@ -16,6 +16,7 @@ featureController.addFeatureImage = async(req, res)=>{
       return sendWithResponse(res, 500, false, "Some error occured!");
     }
 };
+
 featureController.getFeatureImages = async (req, res) => {
   try {
     const images = await Feature.find({});

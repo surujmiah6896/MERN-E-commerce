@@ -17,6 +17,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const authRouter = require('./routes/auth/authRoutes');
 const authProductsRouter = require("./routes/admin/products-routes");
+const featureRouter = require("./routes/feature-routes");
 //init app
 const app = express();
 dotenv.config();
