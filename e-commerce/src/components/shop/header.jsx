@@ -29,6 +29,97 @@ import { shoppingViewHeaderMenuItems } from "../../config";
 // import { logoutUser, fetchCartItems } from "@/redux/actions"; // Adjust imports
 // import UserCartWrapper from "./UserCartWrapper"; // Assuming it's a Chakra-compatible component
 
+//Right Content
+function HeaderRightContent() {
+  const { user } = useSelector((state) => state.auth);
+//   const { cartItems } = useSelector((state) => state.shopCart);
+  const [openCartDrawer, setOpenCartDrawer] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const {
+    isOpen: isCartOpen,
+    onOpen: onCartOpen,
+    onClose: onCartClose,
+  } = useDisclosure();
+
+  function handleLogout() {
+    dispatch(logoutUser());
+  }
+
+//   useEffect(() => {
+//     if (user?.id) dispatch(fetchCartItems(user.id));
+//   }, [dispatch, user?.id]);
+
+  return (
+    <Flex
+      direction={{ base: "column", lg: "row" }}
+      align={{ lg: "center" }}
+      gap={4}
+    >
+      {/* Cart Drawer Trigger */}
+      <Box position="relative">
+        <IconButton
+          icon={<ShoppingCart />}
+          variant="outline"
+          aria-label="Cart"
+          onClick={onCartOpen}
+        />
+        <Box
+          position="absolute"
+          top="-6px"
+          right="-1px"
+          fontWeight="bold"
+          fontSize="xs"
+          color="black"
+        >
+          {/* {cartItems?.items?.length || 0} */}
+        </Box>
+      </Box>
+
+      {/* Cart Drawer */}
+      <Drawer isOpen={isCartOpen} placement="right" onClose={onCartClose}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerBody>
+            {/* <UserCartWrapper
+              setOpenCartSheet={() => setOpenCartDrawer(false)}
+              cartItems={cartItems?.items?.length > 0 ? cartItems.items : []}
+            /> */}
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+
+      {/* User Menu */}
+      <Menu>
+        <MenuButton>
+          <Avatar bg="black" color="white">
+            {/* <Avatar.Fallback>
+            </Avatar.Fallback> */}
+              {user?.userName?.charAt(0).toUpperCase() || "U"}
+          </Avatar>
+        </MenuButton>
+        <MenuList>
+          <Box px={3} py={2}>
+            <Text fontWeight="medium" fontSize="sm">
+              Logged in as {user?.userName}
+            </Text>
+          </Box>
+          <MenuDivider />
+          <MenuItem onClick={() => navigate("/shop/account")}>
+            <UserCog size={16} style={{ marginRight: 8 }} />
+            Account
+          </MenuItem>
+          <MenuDivider />
+          <MenuItem onClick={handleLogout}>
+            <LogOut size={16} style={{ marginRight: 8 }} />
+            Logout
+          </MenuItem>
+        </MenuList>
+      </Menu>
+    </Flex>
+  );
+}
 
 //shopping header
 function ShoppingHeader() {
