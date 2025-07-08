@@ -68,22 +68,18 @@ function ShoppingHome() {
 
   const Toast = useShowToast();
 
+  useEffect(() => {
+    dispatch(getFeatureImages());
+  }, [dispatch]);
 
-  console.log(featureImages);
-  
-  
-    useEffect(() => {
-      dispatch(getFeatureImages());
-    }, [dispatch]);
-
-    useEffect(() => {
-      dispatch(
-        fetchAllFilteredProducts({
-          filterParams: {},
-          sortParams: "price-lowtohigh",
-        })
-      );
-    }, [dispatch]);
+  useEffect(() => {
+    dispatch(
+      fetchAllFilteredProducts({
+        filterParams: {},
+        sortParams: "price-lowtohigh",
+      })
+    );
+  }, [dispatch]);
 
   const handleNavigateToListingPage = (item, section) => {
     console.log("navigate to listing page");
@@ -94,9 +90,11 @@ function ShoppingHome() {
     console.log("get product details", productId);
   };
 
-  const handleAddtoCart = (productId) => {
-    console.log("add to cart", productId);
-    
+  const handleAddtoCart = (product_id,) => {
+    console.log("add to cart", product_id);
+    dispatch(addToCart({ userId: user?.id, productId: product_id, quantity:1 })).then((data)=>{
+      console.log("dispatch addtocart", data);
+    });
   };
 
   return (
@@ -155,7 +153,13 @@ function ShoppingHome() {
       {/* Categories */}
       <Box py="6" bg="gray.50">
         <Container maxW="7xl">
-          <Heading as="h2" size="xl" textAlign="center" mb="8">
+          <Heading
+            as="h2"
+            size="xl"
+            textAlign="center"
+            color={"blackAlpha.500"}
+            mb="8"
+          >
             Shop by Category
           </Heading>
           <SimpleGrid columns={{ base: 2, md: 3, lg: 5 }} spacing={4}>
@@ -189,7 +193,7 @@ function ShoppingHome() {
       {/* Brands */}
       <Box py="6" bg="gray.50">
         <Container maxW="7xl">
-          <Heading as="h2" size="xl" textAlign="center" mb="8">
+          <Heading as="h2" size="xl" textAlign="center" color={"blackAlpha.500"} mb="8">
             Shop by Brand
           </Heading>
           <SimpleGrid columns={{ base: 2, md: 3, lg: 6 }} spacing={4}>
