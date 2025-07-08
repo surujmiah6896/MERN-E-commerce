@@ -5,6 +5,7 @@ const initialState = {
     isLoading: false,
     products: [],
     productDetails: null,
+    error: "",
 }
 
 export const fetchAllFilteredProducts = createAsyncThunk(
@@ -36,6 +37,21 @@ const shoppingProductSlice = createSlice({
       state.productDetails = null;
     },
   },
+  extraReducers: (builder) =>{
+    builder
+      .addCase(fetchAllFilteredProducts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchAllFilteredProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.products = action?.payload?.status ? action?.payload?.data : null;
+      })
+      .addCase(fetchAllFilteredProducts.rejected, (state, action)=>{
+        state.isLoading = false;
+        state.products = [];
+        state.error = action?.payload?.error?.message;
+      });
+  }
 });
 
 
