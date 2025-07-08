@@ -35,6 +35,8 @@ import { useNavigate } from "react-router-dom";
 // import ShoppingProductTile from "./ShoppingProductTile";
 import useShowToast from "../../hooks/useShowToast";
 import { getFeatureImages } from "../../store/feature-slice";
+import { fetchAllFilteredProducts } from "../../store/shop/product-slice";
+import ShoppingProductList from "../../components/shop/product-list";
 
 
 const categoriesWithIcon = [
@@ -58,6 +60,9 @@ function ShoppingHome() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const { featureImages } = useSelector((state) => state.feature);
+  const { products, productDetails } = useSelector(
+    (state) => state.shopProducts
+  );
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
@@ -70,6 +75,16 @@ function ShoppingHome() {
     useEffect(() => {
       dispatch(getFeatureImages());
     }, [dispatch]);
+
+    useEffect(() => {
+      dispatch(
+        fetchAllFilteredProducts({
+          filterParams: {},
+          sortParams: "price-lowtohigh",
+        })
+      );
+    }, [dispatch]);
+
   const handleNavigateToListingPage = (item, section) => {
     console.log("navigate to listing page");
     
@@ -91,6 +106,7 @@ function ShoppingHome() {
         {featureImages && featureImages.length > 0
           ? featureImages.map((slider, index) => (
               <Image
+                key={index}
                 src={`http://localhost:5000/uploads/features/${slider.image}`}
                 alt={`slider-${slider._id}`}
                 objectFit="cover"
@@ -137,7 +153,7 @@ function ShoppingHome() {
       </Box>
 
       {/* Categories */}
-      <Box py="12" bg="gray.50">
+      <Box py="6" bg="gray.50">
         <Container maxW="7xl">
           <Heading as="h2" size="xl" textAlign="center" mb="8">
             Shop by Category
@@ -155,7 +171,12 @@ function ShoppingHome() {
                 _hover={{ shadow: "lg" }}
                 onClick={() => handleNavigateToListingPage(item, "category")}
               >
-                <Icon as={item.icon} boxSize={12} mb={4} color="blackAlpha.500" />
+                <Icon
+                  as={item.icon}
+                  boxSize={12}
+                  mb={4}
+                  color="blackAlpha.500"
+                />
                 <Box color={"blackAlpha.800"} fontWeight="bold">
                   {item.label}
                 </Box>
@@ -166,7 +187,7 @@ function ShoppingHome() {
       </Box>
 
       {/* Brands */}
-      <Box py="12" bg="gray.50">
+      <Box py="6" bg="gray.50">
         <Container maxW="7xl">
           <Heading as="h2" size="xl" textAlign="center" mb="8">
             Shop by Brand
@@ -195,20 +216,22 @@ function ShoppingHome() {
       </Box>
 
       {/* Feature Products */}
-      <Box py="12">
+      <Box py="6">
         <Container maxW="7xl">
-          <Heading as="h2" size="xl" textAlign="center" mb="8">
+          <Heading as="h2" size="xl" textAlign="center" mb="1">
             Featured Products
           </Heading>
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6}>
-            {/* {productList?.map((product) => (
-              <ShoppingProductTile
-                key={product._id}
-                product={product}
-                handleGetProductDetails={handleGetProductDetails}
-                handleAddtoCart={handleAddtoCart}
-              />
-            ))} */}
+            {products && products.length > 0
+              ? products?.map((product) => (
+                  <ShoppingProductList
+                    key={product._id}
+                    product={product}
+                    handleGetProductDetails={handleGetProductDetails}
+                    handleAddtoCart={handleAddtoCart}
+                  />
+                ))
+              : null}
           </SimpleGrid>
         </Container>
       </Box>
