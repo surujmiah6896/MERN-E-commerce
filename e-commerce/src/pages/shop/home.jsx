@@ -37,6 +37,7 @@ import useShowToast from "../../hooks/useShowToast";
 import { getFeatureImages } from "../../store/feature-slice";
 import { fetchAllFilteredProducts } from "../../store/shop/product-slice";
 import ShoppingProductList from "../../components/shop/product-list";
+import { addToCart } from "../../store/cart-slice";
 
 
 const categoriesWithIcon = [
