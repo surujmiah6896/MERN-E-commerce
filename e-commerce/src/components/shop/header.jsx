@@ -26,6 +26,8 @@ import { ShoppingCart } from "lucide-react";
 import { LogOut, UserCog } from "lucide-react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { shoppingViewHeaderMenuItems } from "../../config";
+import { fetchCartItems } from "../../store/cart-slice";
+import UserCartWrapper from "./user-cart-wrapper";
 // import { logoutUser, fetchCartItems } from "@/redux/actions"; // Adjust imports
 // import UserCartWrapper from "./UserCartWrapper"; // Assuming it's a Chakra-compatible component
 
@@ -82,11 +84,13 @@ function MenuItems() {
 //Right Content
 function HeaderRightContent() {
   const { user } = useSelector((state) => state.auth);
-//   const { cartItems } = useSelector((state) => state.shopCart);
+  const { cartItems } = useSelector((state) => state.shopCart);
   const [openCartDrawer, setOpenCartDrawer] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  console.log("cartItems", cartItems);
+  
   const {
     isOpen: isCartOpen,
     onOpen: onCartOpen,
@@ -94,12 +98,14 @@ function HeaderRightContent() {
   } = useDisclosure();
 
   function handleLogout() {
-    dispatch(logoutUser());
+    console.log("logout");
+    
+    // dispatch(logoutUser());
   }
 
-//   useEffect(() => {
-//     if (user?.id) dispatch(fetchCartItems(user.id));
-//   }, [dispatch, user?.id]);
+  useEffect(() => {
+    if (user?.id) dispatch(fetchCartItems(user.id));
+  }, [dispatch, user?.id]);
 
   return (
     <Flex
@@ -121,9 +127,16 @@ function HeaderRightContent() {
           right="-1px"
           fontWeight="bold"
           fontSize="xs"
-          color="black"
+          color="white"
+          bg="black"
+          borderRadius="full"
+          width="20px"
+          height="20px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
         >
-          {/* {cartItems?.items?.length || 0} */}
+          {cartItems?.items?.length || 0}
         </Box>
       </Box>
 
@@ -132,10 +145,10 @@ function HeaderRightContent() {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerBody>
-            {/* <UserCartWrapper
+            <UserCartWrapper
               setOpenCartSheet={() => setOpenCartDrawer(false)}
               cartItems={cartItems?.items?.length > 0 ? cartItems.items : []}
-            /> */}
+            />
           </DrawerBody>
         </DrawerContent>
       </Drawer>
@@ -146,7 +159,7 @@ function HeaderRightContent() {
           <Avatar bg="black" color="white">
             {/* <Avatar.Fallback>
             </Avatar.Fallback> */}
-              {/* {user?.userName?.charAt(0).toUpperCase() || "U"} */}
+            {/* {user?.userName?.charAt(0).toUpperCase() || "U"} */}
           </Avatar>
         </MenuButton>
         <MenuList>
