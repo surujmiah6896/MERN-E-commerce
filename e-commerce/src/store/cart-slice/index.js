@@ -103,6 +103,19 @@ const shoppingCartSlice = createSlice({
           .addCase(fetchCartItems.rejected, (state, action) => {
             state.isLoading = false;
             state.error = action?.payload?.error?.message;
+          })
+          .addCase(deleteCartItem.pending, (state) => {
+            state.isLoading = true;
+          })
+          .addCase(deleteCartItem.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.cartItems = action?.payload?.status
+              ? action?.payload?.data
+              : null;
+          })
+          .addCase(deleteCartItem.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action?.payload?.error?.message;
           });
     }
 });

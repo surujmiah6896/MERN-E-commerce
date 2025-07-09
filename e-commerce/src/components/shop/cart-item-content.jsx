@@ -9,6 +9,7 @@ import {
 import { Minus, Plus, Trash } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import useShowToast from "../../hooks/useShowToast";
+import { deleteCartItem } from "../../store/cart-slice";
 
 function UserCartItemsContent({ cartItem }) {
   const { user } = useSelector((state) => state.auth);
@@ -50,8 +51,20 @@ function UserCartItemsContent({ cartItem }) {
    
   }
 
-  function handleCartItemDelete(getCartItem) {
+  const handleCartItemDelete = async(getCartItem)=> {
    console.log("cart delete", getCartItem);
+
+   try {
+    const data = await dispatch(deleteCartItem({userId: user?.id, productId: getCartItem?.productId})).unwrap();
+     if (data?.status) {
+       Toast("Success", "Product Update Successfully", "success");
+     }
+   } catch (error) {
+     console.error("Add to cart Error:", error);
+     const errorMsg =
+       error?.message || error?.errors?.avatar?.msg || "Something went wrong";
+     Toast("Error", errorMsg, "error");
+   }
    
   }
 

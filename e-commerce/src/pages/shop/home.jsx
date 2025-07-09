@@ -91,10 +91,10 @@ function ShoppingHome() {
     console.log("get product details", productId);
   };
 
-  const handleAddtoCart = (product_id,) => {
+  const handleAddtoCart = async(product_id,) => {
     console.log("add to cart", product_id);
       try{
-          const data = dispatch(
+          const data = await dispatch(
             addToCart({ userId: user?.id, productId: product_id, quantity: 1 })
           ).unwrap();
           console.error("Add to cart Error:", data);
