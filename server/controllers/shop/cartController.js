@@ -95,6 +95,55 @@ cartController.fetchCartItems = async (req, res) => {
   }
 };
 
+cartController.updateCartItemQty = async (req, res) => {
+  try {
+    const { userId, productId, quantity } = req.body;
+
+    if (!userId || !productId || quantity <= 0) {
+      return sendWithResponse(res, 400, false, "Invalid data provided!");
+    }
+
+    const cart = await Cart.findOne({ userId });
+    if (!cart) {
+      return sendWithResponse(res, 400, false, "Cart not found!");
+    }
+
+    const findCurrentProductIndex = cart.items.findIndex(
+      (item) => item.productId.toString() === productId
+    );
+
+    if (findCurrentProductIndex === -1) {
+      return sendWithResponse(res, 400, false, "Cart item not present!");
+    }
+
+    cart.items[findCurrentProductIndex].quantity = quantity;
+    await cart.save();
+
+    await cart.populate({
+      path: "items.productId",
+      select: "image title price salePrice",
+    });
+
+    const populateCartItems = cart.items.map((item) => ({
+      productId: item.productId ? item.productId._id : null,
+      image: item.productId ? item.productId.image : null,
+      title: item.productId ? item.productId.title : "Product not found",
+      price: item.productId ? item.productId.price : null,
+      salePrice: item.productId ? item.productId.salePrice : null,
+      quantity: item.quantity,
+    }));
+
+    const sendData = {
+      ...cart._doc,
+      items: populateCartItems,
+    };
+    return sendWithData(res, 200, true, sendData, "cart update successfully");
+  } catch (error) {
+    console.log(error);
+    return sendWithResponse(res, 500, false, "Cart item update error");
+  }
+};
+
 cartController.deleteCartItem = async (req, res) => {
   try {
     const { userId, productId } = req.params;

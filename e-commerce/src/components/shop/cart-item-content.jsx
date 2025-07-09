@@ -9,7 +9,7 @@ import {
 import { Minus, Plus, Trash } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import useShowToast from "../../hooks/useShowToast";
-import { deleteCartItem } from "../../store/cart-slice";
+import { deleteCartItem, updateCartQuantity } from "../../store/cart-slice";
 
 function UserCartItemsContent({ cartItem }) {
   const { user } = useSelector((state) => state.auth);
@@ -49,9 +49,9 @@ function UserCartItemsContent({ cartItem }) {
    //dispatch cart qty increment;
    console.log("Cart increment done");
 try{
-    const data = await dispatch()
+    const data = await dispatch(updateCartQuantity({userId: user?.id, productId: getCartItem?.productId, quantity: typeOfAction === "plus" ? getCartItem?.quantity + 1 : getCartItem?.quantity - 1,})).unwrap();
    if (data?.status) {
-    Toast("Success", "Product Update Successfully", "success");
+    Toast("Success", "Cart Item Update Successfully", "success");
   }
 } catch (error) {
   console.error("Add to cart Error:", error);
@@ -66,7 +66,7 @@ try{
    try {
     const data = await dispatch(deleteCartItem({userId: user?.id, productId: getCartItem?.productId})).unwrap();
      if (data?.status) {
-       Toast("Success", "Product Update Successfully", "success");
+       Toast("Success", "Cart item delete Successfully", "success");
      }
    } catch (error) {
      console.error("Add to cart Error:", error);

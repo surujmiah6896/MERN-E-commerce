@@ -99,7 +99,7 @@ function ShoppingHome() {
           ).unwrap();
           console.error("Add to cart Error:", data);
           if (data?.status) {
-            Toast("Success", "Product Update Successfully", "success");
+            Toast("Success", "Add to cart Successfully", "success");
           }
        } catch (error) {
          console.error("Add to cart Error:", error);
