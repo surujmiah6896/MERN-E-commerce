@@ -14,37 +14,41 @@ import { useState } from "react";
 import UserCartItemsContent from "../../components/shop/cart-item-content";
 import img from "../../assets/account.jpg";
 import CustomForm from "../../components/common/form";
-import { loginFormControls } from "../../config";
+import { addressFormControls, loginFormControls } from "../../config";
 import Address from "../../components/shop/address-card";
 
 function ShoppingCheckout() {
   const { cartItems } = useSelector((state) => state.shopCart);
   const { user } = useSelector((state) => state.auth);
 //   const { approvalURL } = useSelector((state) => state.shopOrder);
-  const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
   const [isPaymentStart, setIsPaymemntStart] = useState(false);
   const dispatch = useDispatch();
   const toast = useToast();
 
 
-  const initialState = {
-    email: "",
-    password: "",
-  };
-  const onSubmit = async (event) => {}
+    const initialState = {
+        address:"",
+        city:"",
+        phone:"",
+        notes:""
+    };
     const [formData, setFormData] = useState(initialState);
 
-  const totalCartAmount =
-    cartItems?.items?.length > 0
-      ? cartItems.items.reduce(
-          (sum, item) =>
-            sum +
-            (item?.salePrice > 0 ? item.salePrice : item.price) * item.quantity,
-          0
-        )
-      : 0;
+    const totalCartAmount =
+        cartItems?.items?.length > 0
+        ? cartItems.items.reduce(
+            (sum, item) =>
+                sum +
+                (item?.salePrice > 0 ? item.salePrice : item.price) * item.quantity,
+            0
+            )
+        : 0;
 
-  const handleInitiatePaypalPayment = () => {
+  const handleInitiatePaypalPayment = (e) => {
+        e.preventDefault();
+    console.log("formdata",formData);
+    // return;
+    
     if (!cartItems?.items?.length) {
       toast({
         title: "Your cart is empty. Please add items to proceed.",
@@ -54,7 +58,7 @@ function ShoppingCheckout() {
       return;
     }
 
-    if (!currentSelectedAddress) {
+    if (!formData) {
       toast({
         title: "Please select one address to proceed.",
         status: "error",
@@ -74,12 +78,10 @@ function ShoppingCheckout() {
         quantity: item.quantity,
       })),
       addressInfo: {
-        addressId: currentSelectedAddress?._id,
-        address: currentSelectedAddress?.address,
-        city: currentSelectedAddress?.city,
-        pincode: currentSelectedAddress?.pincode,
-        phone: currentSelectedAddress?.phone,
-        notes: currentSelectedAddress?.notes,
+        address: formData?.address,
+        city: formData?.city,
+        phone: formData?.phone,
+        notes: formData?.notes,
       },
       orderStatus: "pending",
       paymentMethod: "paypal",
@@ -105,7 +107,7 @@ function ShoppingCheckout() {
 //   }
 
   return (
-    <Flex direction="column" bg={"blackAlpha.500"}>
+    <Flex direction="column">
       <Box height="300px" w="full" overflow="hidden">
         <Image
           src={img}
@@ -122,21 +124,22 @@ function ShoppingCheckout() {
         p={5}
         mt={5}
       >
-        <GridItem>
-          {/* <CustomForm
-            formControls={loginFormControls}
+        <GridItem bg={"blackAlpha.400"} p={4} borderRadius={4} color={"black"}>
+          <CustomForm
+            formControls={addressFormControls}
             buttonText={"Sign In"}
             formData={formData}
             setFormData={setFormData}
-            onSubmit={onSubmit}
-          /> */}
-          <Address
+            onSubmit={handleInitiatePaypalPayment}
+            isLoading={isPaymentStart}
+          />
+          {/* <Address
             selectedId={currentSelectedAddress}
             setCurrentSelectedAddress={setCurrentSelectedAddress}
-          />
+          /> */}
         </GridItem>
 
-        <GridItem>
+        <GridItem bg={"blackAlpha.400"} p={4} borderRadius={4} color={"black"}>
           <VStack spacing={4} align="stretch" color={"black"}>
             {cartItems?.items?.length > 0 &&
               cartItems.items.map((item) => (
@@ -150,7 +153,7 @@ function ShoppingCheckout() {
               </Flex>
             </Box>
 
-            <Box>
+            {/* <Box>
               <Button
                 colorScheme="blue"
                 w="full"
@@ -160,7 +163,7 @@ function ShoppingCheckout() {
               >
                 Checkout with Paypal
               </Button>
-            </Box>
+            </Box> */}
           </VStack>
         </GridItem>
       </Grid>

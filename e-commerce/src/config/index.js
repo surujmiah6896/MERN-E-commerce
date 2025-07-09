@@ -42,6 +42,38 @@ export const loginFormControls = [
 ];
 
 
+export const addressFormControls = [
+  {
+    name: "address",
+    label: "Address",
+    placeholder: "Enter Address",
+    componentType: "input",
+    type: "text",
+  },
+  {
+    name: "city",
+    label: "City",
+    placeholder: "Enter your city",
+    componentType: "input",
+    type: "text",
+  },
+  {
+    name: "phone",
+    label: "Phone",
+    placeholder: "Enter your phone",
+    componentType: "input",
+    type: "number",
+  },
+  {
+    name: "notes",
+    label: "Notes",
+    placeholder: "Enter your notes",
+    componentType: "input",
+    type: "text",
+  },
+];
+
+
 export const addProductFormElements = [
   {
     label: "Title",

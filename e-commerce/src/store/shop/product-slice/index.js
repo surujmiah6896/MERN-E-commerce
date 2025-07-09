@@ -10,21 +10,31 @@ const initialState = {
 
 export const fetchAllFilteredProducts = createAsyncThunk(
   "/products/fetchAllProducts",
-  async ({ filterParams, sortParams }) => {
-    console.log(fetchAllFilteredProducts, "fetchAllFilteredProducts");
+  async ({ filterParams, sortParams }, { rejectWithValue }) => {
+    try {
+      console.log(fetchAllFilteredProducts, "fetchAllFilteredProducts");
 
-    const query = new URLSearchParams({
-      ...filterParams,
-      sortBy: sortParams,
-    });
+      const query = new URLSearchParams({
+        ...filterParams,
+        sortBy: sortParams,
+      });
 
-    const result = await axios.get(
-      `http://localhost:5000/api/shop/products/get?${query}`
-    );
+      const result = await axios.get(
+        `http://localhost:5000/api/shop/products/get?${query}`
+      );
 
-    console.log(result);
+      console.log(result);
 
-    return result?.data;
+      return result?.data;
+    } catch (err) {
+      console.log("send require", err);
+
+      if (err.response && err.response.data) {
+        return rejectWithValue(err.response.data);
+      } else {
+        return rejectWithValue({ message: err.message });
+      }
+    }
   }
 );
 

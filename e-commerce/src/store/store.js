@@ -4,6 +4,7 @@ import adminProductsReducer from "../store/admin/product-slice/index";
 import featureReducer from "./feature-slice/index";
 import shopProductReducer from "./shop/product-slice";
 import shopCartReducer from "./cart-slice";
+import orderReducer from "./shop/order-slice";
 
 
 const store = configureStore({
@@ -15,6 +16,7 @@ const store = configureStore({
     feature: featureReducer,
     shopProducts: shopProductReducer,
     shopCart: shopCartReducer,
+    order: orderReducer,
 
   },
 });
