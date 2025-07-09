@@ -54,10 +54,35 @@ export const fetchCartItems = createAsyncThunk(
 
 export const deleteCartItem = createAsyncThunk(
   "cart/deleteCartItem",
-  async ({ userId, productId }) => {
+  async ({ userId, productId }, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
         `http://localhost:5000/api/shop/cart/${userId}/${productId}`
+      );
+      return response.data;
+    } catch (err) {
+      console.log("send require", err);
+
+      if (err.response && err.response.data) {
+        return rejectWithValue(err.response.data);
+      } else {
+        return rejectWithValue({ message: err.message });
+      }
+    }
+  }
+);
+
+export const updateCartQuantity = createAsyncThunk(
+  "cart/updateCartQuantity",
+  async ({ userId, productId, quantity }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        "http://localhost:5000/api/shop/cart/update-cart",
+        {
+          userId,
+          productId,
+          quantity,
+        }
       );
       return response.data;
     } catch (err) {
@@ -104,6 +129,19 @@ const shoppingCartSlice = createSlice({
             state.isLoading = false;
             state.error = action?.payload?.error?.message;
           })
+          .addCase(updateCartQuantity.pending, (state) => {
+            state.isLoading = true;
+          })
+          .addCase(updateCartQuantity.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.cartItems = action?.payload?.status
+              ? action?.payload?.data
+              : null;
+          })
+          .addCase(updateCartQuantity.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action?.payload?.error?.message;
+          }) 
           .addCase(deleteCartItem.pending, (state) => {
             state.isLoading = true;
           })

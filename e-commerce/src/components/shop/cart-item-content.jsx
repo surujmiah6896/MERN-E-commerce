@@ -14,11 +14,11 @@ import { deleteCartItem } from "../../store/cart-slice";
 function UserCartItemsContent({ cartItem }) {
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shopCart);
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { products } = useSelector((state) => state.shopProducts);
   const dispatch = useDispatch();
   const Toast = useShowToast();
 
-  function handleUpdateQuantity(getCartItem, typeOfAction) {
+  const handleUpdateQuantity = async(getCartItem, typeOfAction) => {
     if (typeOfAction === "plus") {
       const getCartItems = cartItems.items || [];
 
@@ -27,10 +27,10 @@ function UserCartItemsContent({ cartItem }) {
           (item) => item.productId === getCartItem?.productId
         );
 
-        const getCurrentProductIndex = productList.findIndex(
+        const getCurrentProductIndex = products.findIndex(
           (product) => product._id === getCartItem?.productId
         );
-        const getTotalStock = productList[getCurrentProductIndex]?.totalStock;
+        const getTotalStock = products[getCurrentProductIndex]?.totalStock;
 
         if (indexOfCurrentCartItem > -1) {
           const getQuantity = getCartItems[indexOfCurrentCartItem].quantity;
@@ -48,12 +48,21 @@ function UserCartItemsContent({ cartItem }) {
 
    //dispatch cart qty increment;
    console.log("Cart increment done");
+try{
+    const data = await dispatch()
+   if (data?.status) {
+    Toast("Success", "Product Update Successfully", "success");
+  }
+} catch (error) {
+  console.error("Add to cart Error:", error);
+  const errorMsg =
+    error?.message || error?.errors?.avatar?.msg || "Something went wrong";
+  Toast("Error", errorMsg, "error");
+}
    
   }
 
   const handleCartItemDelete = async(getCartItem)=> {
-   console.log("cart delete", getCartItem);
-
    try {
     const data = await dispatch(deleteCartItem({userId: user?.id, productId: getCartItem?.productId})).unwrap();
      if (data?.status) {
