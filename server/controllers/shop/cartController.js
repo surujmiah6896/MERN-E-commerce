@@ -95,4 +95,51 @@ cartController.fetchCartItems = async (req, res) => {
   }
 };
 
+cartController.deleteCartItem = async (req, res) => {
+  try {
+    const { userId, productId } = req.params;
+    if (!userId || !productId) {
+      return sendWithResponse(res, 400, false, "Invalid data provided!");
+    }
+
+    const cart = await Cart.findOne({ userId }).populate({
+      path: "items.productId",
+      select: "image title price salePrice",
+    });
+
+    if (!cart) {
+      return sendWithResponse(res, 404, false, "Cart not found!");
+    }
+
+    cart.items = cart.items.filter(
+      (item) => item.productId._id.toString() !== productId
+    );
+
+    await cart.save();
+
+    await cart.populate({
+      path: "items.productId",
+      select: "image title price salePrice",
+    });
+
+    const populateCartItems = cart.items.map((item) => ({
+      productId: item.productId ? item.productId._id : null,
+      image: item.productId ? item.productId.image : null,
+      title: item.productId ? item.productId.title : "Product not found",
+      price: item.productId ? item.productId.price : null,
+      salePrice: item.productId ? item.productId.salePrice : null,
+      quantity: item.quantity,
+    }));
+
+    const sendData = {
+      ...cart._doc,
+      items: populateCartItems,
+    };
+    return sendWithData(res, 200, true, sendData, "get data successfully");
+  } catch (error) {
+    console.log(error);
+    return sendWithResponse(res, 500, false, "Error");
+  }
+};
+
 module.exports = cartController;

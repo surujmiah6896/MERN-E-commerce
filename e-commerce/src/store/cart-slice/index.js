@@ -52,7 +52,25 @@ export const fetchCartItems = createAsyncThunk(
   }
 );
 
+export const deleteCartItem = createAsyncThunk(
+  "cart/deleteCartItem",
+  async ({ userId, productId }) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/api/shop/cart/${userId}/${productId}`
+      );
+      return response.data;
+    } catch (err) {
+      console.log("send require", err);
 
+      if (err.response && err.response.data) {
+        return rejectWithValue(err.response.data);
+      } else {
+        return rejectWithValue({ message: err.message });
+      }
+    }
+  }
+);
 
 const shoppingCartSlice = createSlice({
     name:"shoppingCart",
