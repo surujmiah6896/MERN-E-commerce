@@ -143,7 +143,7 @@ function HeaderRightContent() {
       {/* Cart Drawer */}
       <Drawer isOpen={isCartOpen} placement="right" onClose={onCartClose}>
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent maxW={{ base: "100%", md: "420px" }}>
           <DrawerBody>
             <UserCartWrapper
               setOpenCartSheet={() => setOpenCartDrawer(false)}
@@ -224,7 +224,9 @@ function ShoppingHeader() {
         />
 
         {/* Desktop Navigation */}
-        <Box display={{ base: "none", lg: "block" }}>{/* <MenuItems /> */}</Box>
+        <Box display={{ base: "none", lg: "block" }}>
+          <MenuItems />
+          </Box>
 
         {/* Desktop Right Content */}
         <Box display={{ base: "none", lg: "block" }}>
@@ -237,7 +239,7 @@ function ShoppingHeader() {
         <DrawerOverlay />
         <DrawerContent maxW="xs">
           <DrawerBody>
-            {/* <MenuItems /> */}
+            <MenuItems />
             <HeaderRightContent />
           </DrawerBody>
         </DrawerContent>

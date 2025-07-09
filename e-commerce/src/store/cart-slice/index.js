@@ -52,6 +52,8 @@ export const fetchCartItems = createAsyncThunk(
   }
 );
 
+
+
 const shoppingCartSlice = createSlice({
     name:"shoppingCart",
     initialState,

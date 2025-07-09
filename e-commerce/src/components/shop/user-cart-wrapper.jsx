@@ -1,15 +1,14 @@
 import { Box, Button, Flex, Text, VStack, Heading } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import UserCartItemsContent from "./cart-item-content";
 
 function UserCartWrapper({ cartItems, setOpenCartSheet }) {
   const navigate = useNavigate();
 
   const totalCartAmount =
     cartItems && cartItems.length > 0
-      ? cartItems.reduce(
-          (sum, currentItem) =>
-            sum +
-            (currentItem?.salePrice > 0
+      ? cartItems.reduce((sum, currentItem) =>
+            sum +(currentItem?.salePrice > 0
               ? currentItem?.salePrice
               : currentItem?.price) *
               currentItem?.quantity,
@@ -37,7 +36,8 @@ function UserCartWrapper({ cartItems, setOpenCartSheet }) {
         <Box mt={6}>
           <Flex justify="space-between" align="center">
             <Text fontWeight="bold">Total</Text>
-            <Text fontWeight="bold">${totalCartAmount.toFixed(2)}</Text>
+            {cartItems && cartItems.length > 0 ? (
+            <Text fontWeight="bold">${totalCartAmount.toFixed(2)}</Text>): 0}
           </Flex>
         </Box>
 

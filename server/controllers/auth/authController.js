@@ -51,7 +51,7 @@ authController.loginUser = async(req, res) =>{
             role: user.role,
             email: user.email,
             userName: user.userName,
-        },"CLIENT_SECRET_KEY",{expiresIn: "60m"});
+        },"CLIENT_SECRET_KEY",{expiresIn: "12h"});
 
         res
           .cookie("token", token, {
