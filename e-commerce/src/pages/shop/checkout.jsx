@@ -6,8 +6,7 @@ import {
   GridItem,
   Image,
   Text,
-  VStack,
-  useToast,
+  VStack
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
@@ -16,6 +15,8 @@ import img from "../../assets/account.jpg";
 import CustomForm from "../../components/common/form";
 import { addressFormControls, loginFormControls } from "../../config";
 import Address from "../../components/shop/address-card";
+import { createNewOrder } from "../../store/shop/order-slice";
+import useShowToast from "../../hooks/useShowToast";
 
 function ShoppingCheckout() {
   const { cartItems } = useSelector((state) => state.shopCart);
@@ -23,7 +24,7 @@ function ShoppingCheckout() {
 //   const { approvalURL } = useSelector((state) => state.shopOrder);
   const [isPaymentStart, setIsPaymemntStart] = useState(false);
   const dispatch = useDispatch();
-  const toast = useToast();
+  const Toast = useShowToast();
 
 
     const initialState = {
@@ -44,26 +45,25 @@ function ShoppingCheckout() {
             )
         : 0;
 
-  const handleInitiatePaypalPayment = (e) => {
+    function isEmptyObjectValues(obj) {
+        return Object.values(obj).every((val) => val.trim?.() === "");
+    }
+
+  const handleInitiatePaypalPayment = async(e) => {
         e.preventDefault();
     console.log("formdata",formData);
-    // return;
     
     if (!cartItems?.items?.length) {
-      toast({
-        title: "Your cart is empty. Please add items to proceed.",
-        status: "error",
-        isClosable: true,
-      });
+        Toast(
+          "Error",
+          "Your cart is empty. Please add items to proceed.",
+          "error"
+        );
       return;
     }
 
-    if (!formData) {
-      toast({
-        title: "Please select one address to proceed.",
-        status: "error",
-        isClosable: true,
-      });
+    if (isEmptyObjectValues(formData)) {
+      Toast("Error", "Please select one address to proceed.", "error");
       return;
     }
 
@@ -92,14 +92,18 @@ function ShoppingCheckout() {
       paymentId: "",
       payerId: "",
     };
-
-    dispatch(createNewOrder(orderData)).then((data) => {
-      if (data?.payload?.success) {
-        setIsPaymemntStart(true);
-      } else {
-        setIsPaymemntStart(false);
-      }
-    });
+try{
+  const data = await dispatch(createNewOrder(orderData)).unwrap();
+  console.log("order create dispatch", data);
+  if (data?.status) {
+    Toast("Success", "Add to cart Successfully", "success");
+  }
+} catch (error) {
+ console.error("Add to cart Error:", error);
+ const errorMsg =
+   error?.message || error?.errors?.avatar?.msg || "Something went wrong";
+ Toast("Error", errorMsg, "error");
+}
   };
 
 //   if (approvalURL) {

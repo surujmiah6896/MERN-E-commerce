@@ -53,9 +53,4 @@ orderController.createOrder = async (req, res) => {
 
 
 
-module.exports = {
-  createOrder,
-  capturePayment,
-  getAllOrdersByUser,
-  getOrderDetails,
-};
+module.exports = orderController;
