@@ -49,4 +49,50 @@ cartController.addToCart = async (req, res) => {
     }
   };
 
+cartController.fetchCartItems = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    if (!userId) {
+      return sendWithResponse(res, 400, false, "User id is required");
+    }
+
+    const cart = await Cart.findOne({ userId }).populate({
+      path: "items.productId",
+      select: "image title price salePrice",
+    });
+
+    if (!cart) {
+      return sendWithResponse(res, 404, false, "Cart not found!");
+    }
+
+    const validItems = cart.items.filter(
+      (productItem) => productItem.productId
+    );
+
+    if (validItems.length < cart.items.length) {
+      cart.items = validItems;
+      await cart.save();
+    }
+
+    const populateCartItems = validItems.map((item) => ({
+      productId: item.productId._id,
+      image: item.productId.image,
+      title: item.productId.title,
+      price: item.productId.price,
+      salePrice: item.productId.salePrice,
+      quantity: item.quantity,
+    }));
+
+    const sendData = {
+      ...cart._doc,
+      items: populateCartItems,
+    };
+    return  sendWithData(res, 200, true, sendData, "get data Successfully");
+  } catch (error) {
+    console.log(error);
+    return sendWithResponse(res, 500, false, "error");
+  }
+};
+
 module.exports = cartController;
