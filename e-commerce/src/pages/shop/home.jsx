@@ -93,9 +93,21 @@ function ShoppingHome() {
 
   const handleAddtoCart = (product_id,) => {
     console.log("add to cart", product_id);
-    dispatch(addToCart({ userId: user?.id, productId: product_id, quantity:1 })).then((data)=>{
-      console.log("dispatch addtocart", data);
-    });
+      try{
+          const data = dispatch(
+            addToCart({ userId: user?.id, productId: product_id, quantity: 1 })
+          ).unwrap();
+          console.error("Add to cart Error:", data);
+          if (data?.status) {
+            Toast("Success", "Product Update Successfully", "success");
+          }
+       } catch (error) {
+         console.error("Add to cart Error:", error);
+         const errorMsg =
+           error?.message || error?.errors?.avatar?.msg || "Something went wrong";
+         Toast("Error", errorMsg, "error");
+       }
+   
   };
 
   return (

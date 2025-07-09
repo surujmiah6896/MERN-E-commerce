@@ -34,8 +34,14 @@ cartController.addToCart = async (req, res) => {
         cart.items[findCurrentProductIndex].quantity += quantity;
       }
   
-      await cart.save();
-      return sendWithData(res, 200, true, cart, "product add to cart successfully");
+     const cartItem = await cart.save();
+      return sendWithData(
+        res,
+        200,
+        true,
+        cartItem,
+        "product add to cart successfully"
+      );
     
     } catch (error) {
       console.log(error);
