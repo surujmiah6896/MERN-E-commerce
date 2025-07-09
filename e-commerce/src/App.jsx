@@ -13,6 +13,7 @@ import AdminDashboard from "./pages/admin/dashboard";
 import AdminProducts from "./pages/admin/products";
 import ShoppingLayout from "./components/shop/layout";
 import ShoppingHome from "./pages/shop/home";
+import ShoppingCheckout from "./pages/shop/checkout";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -60,6 +61,7 @@ function App() {
         {/* shop */}
         <Route path="/shop" element={<ShoppingLayout />}>
           <Route path="home" element={<ShoppingHome />}></Route>
+          <Route path="checkout" element={<ShoppingCheckout />}></Route>
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

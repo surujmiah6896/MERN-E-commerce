@@ -78,7 +78,7 @@ try{
   }
 
   return (
-    <Flex align="center" gap={4}>
+    <Flex align="center"  gap={4}>
       <Image
         src={`http://localhost:5000/uploads/products/${cartItem?.image}`}
         alt={`slider-${cartItem.productId}`}
