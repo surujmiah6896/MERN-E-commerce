@@ -6,14 +6,14 @@ import {
   GridItem,
   Image,
   Text,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import UserCartItemsContent from "../../components/shop/cart-item-content";
 import img from "../../assets/account.jpg";
 import CustomForm from "../../components/common/form";
-import { addressFormControls, loginFormControls } from "../../config";
+import { addressFormControls } from "../../config";
 import Address from "../../components/shop/address-card";
 import { createNewOrder } from "../../store/shop/order-slice";
 import useShowToast from "../../hooks/useShowToast";
@@ -21,44 +21,43 @@ import useShowToast from "../../hooks/useShowToast";
 function ShoppingCheckout() {
   const { cartItems } = useSelector((state) => state.shopCart);
   const { user } = useSelector((state) => state.auth);
-//   const { approvalURL } = useSelector((state) => state.shopOrder);
+  //   const { approvalURL } = useSelector((state) => state.shopOrder);
   const [isPaymentStart, setIsPaymemntStart] = useState(false);
   const dispatch = useDispatch();
   const Toast = useShowToast();
 
+  const initialState = {
+    address: "",
+    city: "",
+    phone: "",
+    notes: "",
+  };
+  const [formData, setFormData] = useState(initialState);
 
-    const initialState = {
-        address:"",
-        city:"",
-        phone:"",
-        notes:""
-    };
-    const [formData, setFormData] = useState(initialState);
+  const totalCartAmount =
+    cartItems?.items?.length > 0
+      ? cartItems.items.reduce(
+          (sum, item) =>
+            sum +
+            (item?.salePrice > 0 ? item.salePrice : item.price) * item.quantity,
+          0
+        )
+      : 0;
 
-    const totalCartAmount =
-        cartItems?.items?.length > 0
-        ? cartItems.items.reduce(
-            (sum, item) =>
-                sum +
-                (item?.salePrice > 0 ? item.salePrice : item.price) * item.quantity,
-            0
-            )
-        : 0;
+  function isEmptyObjectValues(obj) {
+    return Object.values(obj).every((val) => val.trim?.() === "");
+  }
 
-    function isEmptyObjectValues(obj) {
-        return Object.values(obj).every((val) => val.trim?.() === "");
-    }
+  const handleInitiatePaypalPayment = async (e) => {
+    e.preventDefault();
+    console.log("formdata", formData);
 
-  const handleInitiatePaypalPayment = async(e) => {
-        e.preventDefault();
-    console.log("formdata",formData);
-    
     if (!cartItems?.items?.length) {
-        Toast(
-          "Error",
-          "Your cart is empty. Please add items to proceed.",
-          "error"
-        );
+      Toast(
+        "Error",
+        "Your cart is empty. Please add items to proceed.",
+        "error"
+      );
       return;
     }
 
@@ -92,23 +91,23 @@ function ShoppingCheckout() {
       paymentId: "",
       payerId: "",
     };
-try{
-  const data = await dispatch(createNewOrder(orderData)).unwrap();
-  console.log("order create dispatch", data);
-  if (data?.status) {
-    Toast("Success", "Add to cart Successfully", "success");
-  }
-} catch (error) {
- console.error("Add to cart Error:", error);
- const errorMsg =
-   error?.message || error?.errors?.avatar?.msg || "Something went wrong";
- Toast("Error", errorMsg, "error");
-}
+    try {
+      const data = await dispatch(createNewOrder(orderData)).unwrap();
+      console.log("order create dispatch", data);
+      if (data?.status) {
+        Toast("Success", "Add to cart Successfully", "success");
+      }
+    } catch (error) {
+      console.error("Add to cart Error:", error);
+      const errorMsg =
+        error?.message || error?.errors?.avatar?.msg || "Something went wrong";
+      Toast("Error", errorMsg, "error");
+    }
   };
 
-//   if (approvalURL) {
-//     window.location.href = approvalURL;
-//   }
+  //   if (approvalURL) {
+  //     window.location.href = approvalURL;
+  //   }
 
   return (
     <Flex direction="column">
@@ -157,7 +156,7 @@ try{
               </Flex>
             </Box>
 
-            {/* <Box>
+            <Box>
               <Button
                 colorScheme="blue"
                 w="full"
@@ -167,7 +166,7 @@ try{
               >
                 Checkout with Paypal
               </Button>
-            </Box> */}
+            </Box>
           </VStack>
         </GridItem>
       </Grid>

@@ -50,6 +50,22 @@ orderController.createOrder = async (req, res) => {
     return sendWithResponse(res, 500, false, "Some order create error");
   }
 };
+orderController.getAllOrdersByUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const orders = await Order.find({ userId });
+
+    if (!orders.length) {
+      return sendWithResponse(res, 404, false, "No Found!");
+    }
+    return sendWithData(res, 200, true, orders, "get order Successful!");
+    
+  } catch (e) {
+    console.log(e);
+    return sendWithResponse(res, 500, false, "Some error occured!");
+  }
+};
 
 
 
