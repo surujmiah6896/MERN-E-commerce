@@ -50,6 +50,7 @@ orderController.createOrder = async (req, res) => {
     return sendWithResponse(res, 500, false, "Some order create error");
   }
 };
+
 orderController.getAllOrdersByUser = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -67,6 +68,22 @@ orderController.getAllOrdersByUser = async (req, res) => {
   }
 };
 
+orderController.getOrderDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return sendWithResponse(res, 404, false, "not found");
+    }
+
+    return sendWithData(res, 200, true, order, "order get successfully!");
+  } catch (e) {
+    console.log(e);
+    return sendWithResponse(res, 500, false, "Some error occured!");
+  }
+};
 
 
 module.exports = orderController;
