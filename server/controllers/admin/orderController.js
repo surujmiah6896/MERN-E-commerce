@@ -38,14 +38,17 @@ orderController.getOrderDetails = async (req, res) => {
 orderController.updateOrderStatus = async (req, res) =>{
      try {
        const { id } = req.params;
-       const {orderStats} = req.body;
+       const { orderStatus } = req.body;
 
        const order = await Order.findById(id);
+
        if (!order) {
          return sendWithResponse(res, 404, false, "not found!");
        }
 
-       const updateOrder = await Order.findByIdAndUpdate(id, { orderStats });
+       const updateOrder = await Order.findByIdAndUpdate(id, {
+         orderStatus
+       });
 
        return sendWithData(
          res,

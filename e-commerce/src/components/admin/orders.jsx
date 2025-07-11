@@ -17,7 +17,7 @@ import {
   ModalCloseButton,
   ModalBody,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AdminOrderDetailsView from "./order-details";
 import { getAllAdminOrders, getOrderDetails } from "../../store/admin/order-slice";

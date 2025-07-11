@@ -7,42 +7,39 @@ import {
   HStack,
   UnorderedList,
   ListItem,
-  useToast,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import CustomForm from "../common/form";
 import { getAllAdminOrders, getOrderDetails, updateOrderStatus } from "../../store/admin/order-slice";
+import useShowToast from "../../hooks/useShowToast";
 
 const initialFormData = {
   status: "",
 };
 
 function AdminOrderDetailsView({ orderDetails }) {
+    
   const [formData, setFormData] = useState(initialFormData);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const toast = useToast();
+  const Toast = useShowToast();
 
-  function handleUpdateStatus(event) {
+  const handleUpdateStatus = async(event)=>{
     event.preventDefault();
     const { status } = formData;
+    
 
-    dispatch(
-      updateOrderStatus({ id: orderDetails?._id, orderStatus: status })
-    ).then((data) => {
-      if (data?.payload?.success) {
+    const data = await dispatch(updateOrderStatus({ id: orderDetails?._id, orderStatus: status })).unwrap();
+    console.log("update data", data);
+    
+      if (data?.status) {
         dispatch(getOrderDetails(orderDetails?._id));
         dispatch(getAllAdminOrders());
         setFormData(initialFormData);
-        toast({
-          title: data?.payload?.message,
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
+        Toast("Success", data?.message, "success");
       }
-    });
+  
   }
 
   return (
@@ -94,7 +91,7 @@ function AdminOrderDetailsView({ orderDetails }) {
         {/* Cart Items */}
         <Box>
           <Text fontWeight="medium" mb={2}>
-            Order Details {orderDetails}
+            Order Details
           </Text>
           <UnorderedList spacing={3}>
             {orderDetails?.cartItems?.map((item, idx) => (
@@ -106,6 +103,13 @@ function AdminOrderDetailsView({ orderDetails }) {
                 </HStack>
               </ListItem>
             ))}
+            <ListItem>
+              <HStack justify="space-between">
+                <Text>--------</Text>
+                <Text>--------</Text>
+                <Text>Total: ${orderDetails?.totalAmount} </Text>
+              </HStack>
+            </ListItem>
           </UnorderedList>
         </Box>
 
@@ -114,7 +118,7 @@ function AdminOrderDetailsView({ orderDetails }) {
           <Text fontWeight="medium" mb={2}>
             Shipping Info
           </Text>
-          <VStack align="start" spacing={1} color="gray.600">
+          <VStack align="start" spacing={1} color="gray.400">
             <Text>{user?.userName}</Text>
             <Text>{orderDetails?.addressInfo?.address}</Text>
             <Text>{orderDetails?.addressInfo?.city}</Text>

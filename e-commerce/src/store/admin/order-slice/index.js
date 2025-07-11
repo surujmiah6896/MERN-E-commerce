@@ -35,12 +35,17 @@ export const getOrderDetails = createAsyncThunk(
 export const updateOrderStatus = createAsyncThunk(
   "/order/updateOrderStatus",
   async ({ id, orderStatus }) => {
+    console.log("slice id", id);
+    console.log("slice orderstatus", orderStatus);
+    
     const response = await axios.put(
       `http://localhost:5000/api/admin/orders/update/${id}`,
       {
         orderStatus,
       }
     );
+    console.log("response order update", response);
+    
 
     return response.data;
   }
@@ -59,7 +64,7 @@ const adminOrderSlice = createSlice({
           })
           .addCase(getAllAdminOrders.fulfilled, (state, action) => {
             console.log("get all order full", action);
-            
+
             state.isLoading = false;
             state.orders = action?.payload?.status
               ? action?.payload?.data
@@ -74,11 +79,24 @@ const adminOrderSlice = createSlice({
           })
           .addCase(getOrderDetails.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.orders = action?.payload?.status
+            state.orderDetails = action?.payload?.status
               ? action?.payload?.data
               : null;
           })
           .addCase(getOrderDetails.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action?.error?.message;
+          })
+          .addCase(updateOrderStatus.pending, (state) => {
+            state.isLoading = true;
+          })
+          .addCase(updateOrderStatus.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.orderDetails = action?.payload?.status
+              ? action?.payload?.data
+              : null;
+          })
+          .addCase(updateOrderStatus.rejected, (state, action) => {
             state.isLoading = false;
             state.error = action?.error?.message;
           });
