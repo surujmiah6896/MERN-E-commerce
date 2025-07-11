@@ -19,28 +19,30 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import AdminOrderDetailsView from "./order-details";
+import { getAllAdminOrders, getOrderDetails } from "../../store/admin/order-slice";
 
 function AdminOrdersView() {
   const dispatch = useDispatch();
-  const { orderList, orderDetails } = useSelector((state) => state.adminOrder);
+  const { orders, orderDetails } = useSelector((state) => state.adminOrder);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   useEffect(() => {
-    dispatch(getAllOrdersForAdmin());
+    dispatch(getAllAdminOrders());
   }, [dispatch]);
+  
 
   useEffect(() => {
     if (orderDetails) onOpen();
   }, [orderDetails]);
 
   const handleFetchOrderDetails = (orderId) => {
-    setSelectedOrderId(orderId);
-    dispatch(getOrderDetailsForAdmin(orderId));
+      dispatch(getOrderDetails(orderId));
+        onOpen();
   };
 
   const handleCloseModal = () => {
-    dispatch(resetOrderDetails());
+    dispatch(getAllAdminOrders());
     onClose();
   };
 
@@ -61,8 +63,8 @@ function AdminOrdersView() {
           </Tr>
         </Thead>
         <Tbody>
-          {orderList?.length > 0 &&
-            orderList.map((orderItem) => (
+          {orders?.length > 0 &&
+            orders.map((orderItem) => (
               <Tr key={orderItem._id}>
                 <Td>{orderItem._id}</Td>
                 <Td>{orderItem?.orderDate.split("T")[0]}</Td>
@@ -99,7 +101,7 @@ function AdminOrdersView() {
       {/* Order Details Modal */}
       <Modal isOpen={isOpen} onClose={handleCloseModal} size="xl">
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent >
           <ModalHeader>Order Details</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

@@ -5,6 +5,7 @@ import featureReducer from "./feature-slice/index";
 import shopProductReducer from "./shop/product-slice";
 import shopCartReducer from "./cart-slice";
 import orderReducer from "./shop/order-slice";
+import adminOrderReducer from "./admin/order-slice";
 
 
 const store = configureStore({
@@ -12,6 +13,7 @@ const store = configureStore({
     auth: authReducer,
 
     adminProducts: adminProductsReducer,
+    adminOrder: adminOrderReducer,
 
     feature: featureReducer,
     shopProducts: shopProductReducer,

@@ -11,13 +11,12 @@ import {
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import {
-  updateOrderStatus,
-  getOrderDetailsForAdmin,
-  getAllOrdersForAdmin,
-} from "@/redux/actions/adminOrders"; // adjust imports
-import CommonForm from "@/components/common/CommonForm"; // adjust path if needed
-import { initialFormData } from "@/constants"; // make sure it's imported
+import CustomForm from "../common/form";
+import { getAllAdminOrders, getOrderDetails, updateOrderStatus } from "../../store/admin/order-slice";
+
+const initialFormData = {
+  status: "",
+};
 
 function AdminOrderDetailsView({ orderDetails }) {
   const [formData, setFormData] = useState(initialFormData);
@@ -33,8 +32,8 @@ function AdminOrderDetailsView({ orderDetails }) {
       updateOrderStatus({ id: orderDetails?._id, orderStatus: status })
     ).then((data) => {
       if (data?.payload?.success) {
-        dispatch(getOrderDetailsForAdmin(orderDetails?._id));
-        dispatch(getAllOrdersForAdmin());
+        dispatch(getOrderDetails(orderDetails?._id));
+        dispatch(getAllAdminOrders());
         setFormData(initialFormData);
         toast({
           title: data?.payload?.message,
@@ -95,7 +94,7 @@ function AdminOrderDetailsView({ orderDetails }) {
         {/* Cart Items */}
         <Box>
           <Text fontWeight="medium" mb={2}>
-            Order Details
+            Order Details {orderDetails}
           </Text>
           <UnorderedList spacing={3}>
             {orderDetails?.cartItems?.map((item, idx) => (
@@ -119,7 +118,6 @@ function AdminOrderDetailsView({ orderDetails }) {
             <Text>{user?.userName}</Text>
             <Text>{orderDetails?.addressInfo?.address}</Text>
             <Text>{orderDetails?.addressInfo?.city}</Text>
-            <Text>{orderDetails?.addressInfo?.pincode}</Text>
             <Text>{orderDetails?.addressInfo?.phone}</Text>
             <Text>{orderDetails?.addressInfo?.notes}</Text>
           </VStack>
@@ -127,7 +125,7 @@ function AdminOrderDetailsView({ orderDetails }) {
 
         {/* Update Form */}
         <Box>
-          <CommonForm
+          <CustomForm
             formControls={[
               {
                 label: "Order Status",

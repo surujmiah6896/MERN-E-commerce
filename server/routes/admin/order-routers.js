@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get("/get", orderController.getAllOrders);
 router.get("/details/:id", orderController.getOrderDetails);
-router.put("/update/:id", updateOrderStatus);
+router.put("/update/:id", orderController.updateOrderStatus);
 
 
 module.exports = router;
