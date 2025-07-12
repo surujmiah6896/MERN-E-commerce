@@ -12,8 +12,6 @@ export const fetchAllFilteredProducts = createAsyncThunk(
   "/products/fetchAllProducts",
   async ({ filterParams, sortParams }, { rejectWithValue }) => {
     try {
-      console.log(fetchAllFilteredProducts, "fetchAllFilteredProducts");
-
       const query = new URLSearchParams({
         ...filterParams,
         sortBy: sortParams,

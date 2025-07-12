@@ -28,6 +28,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { shoppingViewHeaderMenuItems } from "../../config";
 import { fetchCartItems } from "../../store/cart-slice";
 import UserCartWrapper from "./user-cart-wrapper";
+import { getAllAdminCategories } from "../../store/admin/category-slice";
 // import { logoutUser, fetchCartItems } from "@/redux/actions"; // Adjust imports
 // import UserCartWrapper from "./UserCartWrapper"; // Assuming it's a Chakra-compatible component
 
@@ -36,6 +37,16 @@ function MenuItems() {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { categories } = useSelector((state) => state.adminCategory);
+  const dispatch = useDispatch(); 
+
+
+  useEffect(() => {
+    dispatch(getAllAdminCategories());
+  }, [dispatch]);
+
+  console.log("header menus", categories);
+  
 
   function handleNavigate(getCurrentMenuItem) {
     sessionStorage.removeItem("filters");
@@ -65,16 +76,16 @@ function MenuItems() {
       align={{ lg: "center" }}
       mb={{ base: 3, lg: 0 }}
     >
-      {shoppingViewHeaderMenuItems.map((menuItem) => (
+      {categories.map((menuItem) => (
         <Text
-          key={menuItem.id}
+          key={menuItem._id}
           fontSize="sm"
           fontWeight="medium"
           cursor="pointer"
           onClick={() => handleNavigate(menuItem)}
           _hover={{ color: "blue.500" }}
         >
-          {menuItem.label}
+          {menuItem.name}
         </Text>
       ))}
     </Flex>
@@ -89,7 +100,6 @@ function HeaderRightContent() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  console.log("cartItems", cartItems);
   
   const {
     isOpen: isCartOpen,
