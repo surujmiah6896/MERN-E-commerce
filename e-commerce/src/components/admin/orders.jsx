@@ -48,7 +48,7 @@ function AdminOrdersView() {
 
   return (
     <Box borderWidth="1px" borderRadius="lg" p={6}>
-      <Heading size="md" mb={4}>
+      <Heading size="md" color={"blackAlpha.500"} mb={4}>
         All Orders
       </Heading>
 

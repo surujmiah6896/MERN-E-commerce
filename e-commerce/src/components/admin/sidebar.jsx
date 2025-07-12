@@ -12,12 +12,19 @@ import {
   Flex,
   HStack,
   Text,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionIcon,
+  AccordionPanel,
+  Button,
 } from "@chakra-ui/react";
 import {
   BadgeCheck,
   ChartNoAxesCombined,
   LayoutDashboard,
   ShoppingBasket,
+  ChartBarStacked,
 } from "lucide-react";
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";// Assuming this is an icon component
@@ -30,10 +37,22 @@ const adminSidebarMenuItems = [
     icon: <LayoutDashboard />,
   },
   {
-    id: "products",
+    id: 2,
+    label: "Category",
+    icon: <ChartBarStacked />,
+    children: [
+      { id: 21, label: "All Categories", path: "/admin/category" },
+      { id: 22, label: "Subcategories", path: "/admin/subcategory" },
+    ],
+  },
+  {
+    id: 3,
     label: "Products",
-    path: "/admin/products",
     icon: <ShoppingBasket />,
+    children: [
+      { id: 31, label: "All Products", path: "/admin/products" },
+      { id: 32, label: "Add Product", path: "/admin/products/add" },
+    ],
   },
   {
     id: "orders",
@@ -42,30 +61,78 @@ const adminSidebarMenuItems = [
     icon: <BadgeCheck />,
   },
 ];
-function MenuItems({setOpen}){
-    const navigate = useNavigate();
-    return (
-      <VStack as="nav" mt={8} spacing={2} align="stretch">
-        {adminSidebarMenuItems.map((menuItem) => (
-          <HStack
-            key={menuItem.id}
-            px={3}
-            py={2}
-            borderRadius="md"
-            cursor="pointer"
-            onClick={() => {
-              navigate(menuItem.path);
-              if (setOpen) setOpen(false);
-            }}
-            _hover={{ bg: "gray.100", color: "gray.900" }}
-            color="gray.600"
-          >
-            <Box>{menuItem.icon}</Box>
-            <Text fontSize="lg">{menuItem.label}</Text>
-          </HStack>
-        ))}
-      </VStack>
-    );
+function MenuItems({ setOpen }) {
+  const navigate = useNavigate();
+
+  return (
+    <Accordion allowMultiple as="nav" mt={8} defaultIndex={[]} allowToggle>
+      {adminSidebarMenuItems.map((item) => {
+        if (item.children) {
+          return (
+            <AccordionItem key={item.id} border="none">
+              <AccordionButton
+                px={3}
+                py={2}
+                borderRadius="md"
+                _hover={{ bg: "gray.100", color: "gray.900" }}
+                color="gray.600"
+              >
+                <HStack flex="1" textAlign="left" spacing={3}>
+                  <Box>{item.icon}</Box>
+                  <Text fontSize="lg">{item.label}</Text>
+                </HStack>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel pb={2} pl={8}>
+                <VStack align="start" spacing={1}>
+                  {item.children.map((subItem) => (
+                    <Button
+                      key={subItem.id}
+                      variant="ghost"
+                      size="sm"
+                      w="full"
+                      justifyContent="start"
+                      color="gray.600"
+                      _hover={{ bg: "gray.100", color: "gray.900" }}
+                      onClick={() => {
+                        navigate(subItem.path);
+                        if (setOpen) setOpen(false);
+                      }}
+                    >
+                      {subItem.label}
+                    </Button>
+                  ))}
+                </VStack>
+              </AccordionPanel>
+            </AccordionItem>
+          );
+        } else {
+          return (
+            <AccordionItem key={item.id} border="none" isFocusable={false}>
+              <Box
+                as="button"
+                w="full"
+                px={3}
+                py={2}
+                borderRadius="md"
+                onClick={() => {
+                  navigate(item.path);
+                  if (setOpen) setOpen(false);
+                }}
+                _hover={{ bg: "gray.100", color: "gray.900" }}
+                color="gray.600"
+              >
+                <HStack spacing={3}>
+                  <Box>{item.icon}</Box>
+                  <Text fontSize="lg">{item.label}</Text>
+                </HStack>
+              </Box>
+            </AccordionItem>
+          );
+        }
+      })}
+    </Accordion>
+  );
 }
 
 const AdminSidebar = ({ open, setOpen }) => {
@@ -90,7 +157,7 @@ const AdminSidebar = ({ open, setOpen }) => {
             </DrawerHeader>
             <DrawerBody>
               <VStack spacing={4} align="stretch" h="full">
-                <MenuItems setOpen={setOpen}/>
+                <MenuItems setOpen={setOpen} />
               </VStack>
             </DrawerBody>
           </DrawerContent>

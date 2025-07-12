@@ -16,6 +16,7 @@ import ShoppingHome from "./pages/shop/home";
 import ShoppingCheckout from "./pages/shop/checkout";
 import AdminOrders from "./pages/admin/orders";
 import UnauthPage from "./pages/unauth-page";
+import AdminCategory from "./pages/admin/category";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -58,6 +59,7 @@ function App() {
         >
           <Route path="dashboard" element={<AdminDashboard />}></Route>
           <Route path="products" element={<AdminProducts />}></Route>
+          <Route path="category" element={<AdminCategory />}></Route>
           <Route path="orders" element={<AdminOrders />}></Route>
         </Route>
 

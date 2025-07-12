@@ -136,6 +136,16 @@ export const addProductFormElements = [
   },
 ];
 
+export const addCategoryFormElements = [
+  {
+    label: "Title",
+    name: "name",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter Category title",
+  },
+];
+
 
 export const shoppingViewHeaderMenuItems = [
   {
