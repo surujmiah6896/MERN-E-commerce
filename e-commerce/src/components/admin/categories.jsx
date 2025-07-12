@@ -56,7 +56,7 @@ function AdminCategoryView({ setCurrentEditedId, setFormData, onOpen }) {
         <Thead>
           <Tr>
             <Th>Order ID</Th>
-            {/* <Th>Order Date</Th> */}
+            <Th>Order Name</Th>
             <Th>Order Status</Th>
             <Th>Details</Th>
           </Tr>
@@ -66,7 +66,7 @@ function AdminCategoryView({ setCurrentEditedId, setFormData, onOpen }) {
             categories.map((Item) => (
               <Tr key={Item._id}>
                 <Td>{Item._id}</Td>
-                {/* <Td>{Item?.categoryDate.split("T")[0]}</Td> */}
+                <Td>{Item?.name}</Td>
                 <Td>
                   <Badge
                     colorScheme={Item.isActive === true ? "green" : "red"}

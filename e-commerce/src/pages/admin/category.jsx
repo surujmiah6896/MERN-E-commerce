@@ -17,11 +17,12 @@ import { addCategoryFormElements } from "../../config";
 import CustomForm from "../../components/common/form";
 import AdminCategoryView from "../../components/admin/categories";
 import { useDispatch } from "react-redux";
-import { editAdminCategories, getAllAdminCategories } from "../../store/admin/category-slice";
+import { createAdminCategories, editAdminCategories, getAllAdminCategories } from "../../store/admin/category-slice";
 import useShowToast from "../../hooks/useShowToast";
 
 const initialFormData = {
   name: "",
+  isActive: "",
 };
 
 function AdminCategory() {
@@ -53,8 +54,6 @@ function AdminCategory() {
   };
 
   const categoryEdit = async() =>{
-    console.log("setFormData", formData);
-    
     try {
           const data = await dispatch(
             editAdminCategories({
@@ -79,8 +78,23 @@ function AdminCategory() {
     
   } 
   
-  const categoryAdd = () => {
-    console.log("category add", formData);
+  const categoryAdd = async () => {
+     try {
+          const data = await dispatch(
+            createAdminCategories(formData)
+          ).unwrap();
+          if(data?.status){
+            dispatch(getAllAdminCategories());
+            onClose();
+            setFormData(initialFormData);
+            Toast("Success", "Category Add Successfully", "success");
+          }
+        } catch (error) {
+          console.error("Add new Product Error:", error);
+          const errorMsg =
+            error?.message || error?.errors?.avatar?.msg || "Something went wrong";
+          Toast("Error", errorMsg, "error");
+        }
   };
   return (
     <Fragment>

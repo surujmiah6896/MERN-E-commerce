@@ -144,6 +144,15 @@ export const addCategoryFormElements = [
     type: "text",
     placeholder: "Enter Category title",
   },
+  {
+    label: "Status",
+    name: "isActive",
+    componentType: "select",
+    options: [
+      { id: true, label: "Active" },
+      { id: false, label: "Deactive" },
+    ],
+  },
 ];
 
 

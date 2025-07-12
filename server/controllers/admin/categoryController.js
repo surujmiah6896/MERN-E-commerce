@@ -42,7 +42,7 @@ categoryController.getAllCategory = async (req, res) =>{
 categoryController.updateCategory = async(req, res) =>{
     try {
         const { id } = req.params;
-        const { name } = req.body;
+        const { name, isActive } = req.body;
 
         if (!name) {
             return sendWithResponse(res, 400, false, "Name is required");
@@ -59,6 +59,7 @@ categoryController.updateCategory = async(req, res) =>{
         }
 
         category.name = name;
+        category.isActive = isActive;
         const updatedCategory = await category.save();
 
         return sendWithData(res, 200, true, updatedCategory, "Category updated successfully!");
