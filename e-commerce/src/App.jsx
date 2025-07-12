@@ -15,6 +15,7 @@ import ShoppingLayout from "./components/shop/layout";
 import ShoppingHome from "./pages/shop/home";
 import ShoppingCheckout from "./pages/shop/checkout";
 import AdminOrders from "./pages/admin/orders";
+import UnauthPage from "./pages/unauth-page";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -66,6 +67,7 @@ function App() {
           <Route path="checkout" element={<ShoppingCheckout />}></Route>
         </Route>
 
+        <Route path="/unauth-page" element={<UnauthPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Flex>

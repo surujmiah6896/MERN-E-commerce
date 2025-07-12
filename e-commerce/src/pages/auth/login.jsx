@@ -21,8 +21,18 @@ const AuthLogin = () => {
     event.preventDefault();
     try {
       const data = await dispatch(loginUser(formData)).unwrap();
-      navigate("/admin/dashboard");
-      Toast("Success", data?.message, "success");
+      console.log("login  userdata", data);
+      if(data?.user?.role === "admin"){
+        Toast("Success", data?.message, "success");
+        navigate("/admin/dashboard");
+      }else if (data?.user?.role === "user") {
+        Toast("Success", data?.message, "success");
+        navigate("/shop/home");
+        // navigate("/user/dashboard");
+      }else{
+        Toast("Success", data?.message, "success");
+        navigate("/unauth-page");
+      }
     } catch (error) {
       console.error("Register Error:", error);
       const errorMsg = error?.message || "Something went wrong";

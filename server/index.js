@@ -21,6 +21,7 @@ const featureRouter = require("./routes/feature-routes");
 const shopProductsRouter = require("./routes/shop/products-routes");
 const shopCartRouter= require("./routes/shop/cart-routes");
 const shopOrderRouter = require("./routes/order-routes");
+const adminCategoryRouter = require("./routes/admin/category-routes");
 const adminOrderRouter = require("./routes/admin/order-routers");
 //init app
 const app = express();
@@ -60,6 +61,7 @@ app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", authProductsRouter);
 app.use("/api/admin/orders", adminOrderRouter);
+app.use("/api/admin/category", adminCategoryRouter);
 
 app.use("/api/shop/products", shopProductsRouter);
 app.use("/api/shop/cart", shopCartRouter);
