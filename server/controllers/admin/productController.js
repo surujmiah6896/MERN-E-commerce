@@ -14,7 +14,7 @@ productController.addProduct = async(req, res) =>{
       const {
         title,
         description,
-        category,
+        categoryId,
         brand,
         price,
         salePrice,
@@ -26,7 +26,7 @@ productController.addProduct = async(req, res) =>{
         title,
         description,
         image: uploadedFile,
-        category,
+        categoryId,
         brand,
         price,
         salePrice,

@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addNewProduct, deleteProduct, editProduct, getAllProducts } from "../../store/admin/product-slice";
 import useShowToast from "../../hooks/useShowToast";
 import AdminProductList from "../../components/admin/product-list";
+import { getAllAdminCategories } from "../../store/admin/category-slice";
 
 const initialFormData = {
   image: null,
@@ -38,8 +39,11 @@ const AdminProducts = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [formData, setFormData] = useState(initialFormData);
   const [currentEditedId, setCurrentEditedId] = useState(null);
+  const [updateProductFormElements, setUpdateProductFormElements] =
+    useState(null);
   const [imageFile, setImageFile] = useState(null);
-  const { products}  = useSelector((state) => state.adminProducts);
+  const { products } = useSelector((state) => state.adminProducts);
+  const { categories } = useSelector((state) => state.adminCategory);
   const dispatch = useDispatch();
   const Toast = useShowToast();
 
@@ -47,11 +51,12 @@ const AdminProducts = () => {
     onClose();
   };
 
+
   const onSubmit = async (event) => {
     event.preventDefault();
-    if(currentEditedId !== null){
+    if (currentEditedId !== null) {
       productEdit();
-    }else{
+    } else {
       productAdd();
     }
   };
@@ -80,13 +85,16 @@ const AdminProducts = () => {
         error?.message || error?.errors?.avatar?.msg || "Something went wrong";
       Toast("Error", errorMsg, "error");
     }
+  };
 
-  }
-
-  const productAdd = async () =>{
+  const productAdd = async () => {
+    console.log(formData);
+    
     try {
-      const data = await dispatch(addNewProduct({ ...formData, image: imageFile })).unwrap();
-      if(data?.status){
+      const data = await dispatch(
+        addNewProduct({ ...formData, image: imageFile })
+      ).unwrap();
+      if (data?.status) {
         dispatch(getAllProducts());
         onClose();
         setImageFile(null);
@@ -96,19 +104,19 @@ const AdminProducts = () => {
     } catch (error) {
       console.error("Add new Product Error:", error);
       const errorMsg =
-        error?.message || error?.errors?.avatar?.msg || "Something went wrong";
+        error?.message || "Something went wrong";
       Toast("Error", errorMsg, "error");
     }
-  }
+  };
 
   const handleDelete = async (product_id) => {
     try {
       const data = dispatch(deleteProduct(product_id)).unwrap();
       console.log("delete data", data);
-      
+
       // if (data?.status) {
-        dispatch(getAllProducts());
-        Toast("Success", "Product Delete Successfully", "success");
+      dispatch(getAllProducts());
+      Toast("Success", "Product Delete Successfully", "success");
       // }
     } catch (error) {
       console.error("Product delete Error:", error);
@@ -116,18 +124,35 @@ const AdminProducts = () => {
         error?.message || error?.errors?.avatar?.msg || "Something went wrong";
       Toast("Error", errorMsg, "error");
     }
-  }
+  };
 
   const handleAddNewProduct = () => {
     setCurrentEditedId(null);
     setImageFile(null);
     setFormData(initialFormData);
     onOpen(true);
-  }
+  };
 
   useEffect(() => {
     dispatch(getAllProducts());
+    dispatch(getAllAdminCategories());
   }, [dispatch]);
+
+  useEffect(() => {
+    const categoryOptions = categories.map((cat) => ({
+      id: cat._id,
+      label: cat.name,
+    }));
+
+    const updatedForm = addProductFormElements.map((field) => {
+      if (field.name === "categoryId") {
+        return { ...field, options: categoryOptions };
+      }
+      return field;
+    });
+
+    setUpdateProductFormElements(updatedForm);
+  }, [categories]);
 
   return (
     <Fragment>
@@ -186,7 +211,7 @@ const AdminProducts = () => {
                 formData={formData}
                 buttonText={currentEditedId !== null ? "Edit" : "Add"}
                 //   isBtnDisabled={!isFormValida()}
-                formControls={addProductFormElements}
+                formControls={updateProductFormElements}
               />
             </Box>
           </DrawerBody>
