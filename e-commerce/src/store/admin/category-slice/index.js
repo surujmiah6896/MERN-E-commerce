@@ -46,6 +46,16 @@ export const editAdminCategories = createAsyncThunk(
   }
 );
 
+export const deleteAdminCategories = createAsyncThunk(
+  "get/deleteAdminCategories",
+  async (id) => {
+    const response = await axios.delete(
+      `http://localhost:5000/api/admin/category/delete/${id}`
+    );
+
+    return response.data;
+  }
+);
 
 
 
@@ -102,6 +112,17 @@ const categorySlice = createSlice({
             console.log("cet update", action);
 
             state.error = action?.error?.message;
+          })
+          .addCase(deleteAdminCategories.fulfilled, (state, action) => {
+            state.isLoading = false;
+            console.log("delete id", action);
+            
+            // Remove the deleted category from the categories array
+            if (action?.payload?.status && action?.payload?.data) {
+              state.categories = state.categories.filter(
+                (category) => category._id !== action?.payload?.data?._id
+              );
+            }
           });
     }
 });

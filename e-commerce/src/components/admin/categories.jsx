@@ -9,7 +9,6 @@ import {
   Th,
   Td,
   Heading,
-  useDisclosure,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -17,12 +16,13 @@ import {
   ModalCloseButton,
   ModalBody,
 } from "@chakra-ui/react";
+import { SquarePen, Trash2 } from "lucide-react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AdminOrderDetailsView from "./order-details";
 import { getAllAdminCategories } from "../../store/admin/category-slice";
 
-function AdminCategoryView({ setCurrentEditedId, setFormData, onOpen }) {
+function AdminCategoryView({ setCurrentEditedId,setCategoryDeletedId, onDeleteOpen, setFormData, onOpen }) {
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.adminCategory);
   //   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -30,7 +30,6 @@ function AdminCategoryView({ setCurrentEditedId, setFormData, onOpen }) {
   useEffect(() => {
     dispatch(getAllAdminCategories());
   }, [dispatch]);
-  console.log("categories", categories);
 
   //   useEffect(() => {
   //     if (categories) onOpen();
@@ -78,7 +77,7 @@ function AdminCategoryView({ setCurrentEditedId, setFormData, onOpen }) {
                   </Badge>
                 </Td>
                 <Td>
-                  <Button
+                  <Button mr={2}
                     bg={"blackAlpha.500"}
                     _hover={{ bg: "blackAlpha.600", color: "blue:500" }}
                     size="sm"
@@ -88,7 +87,18 @@ function AdminCategoryView({ setCurrentEditedId, setFormData, onOpen }) {
                       setFormData(Item);
                     }}
                   >
-                    Edit
+                    <SquarePen/>
+                  </Button>
+                  <Button
+                    bg={"red.500"}
+                    _hover={{ bg: "blackAlpha.600", color: "blue:500" }}
+                    size="sm"
+                    onClick={() => {
+                    onDeleteOpen();
+                      setCategoryDeletedId(Item._id);
+                    }}
+                  >
+                    <Trash2/>
                   </Button>
                 </Td>
               </Tr>

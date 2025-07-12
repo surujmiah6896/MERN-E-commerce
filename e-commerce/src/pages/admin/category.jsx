@@ -11,14 +11,21 @@ import {
   DrawerCloseButton,
   Heading,
   Flex,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
 } from "@chakra-ui/react";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { addCategoryFormElements } from "../../config";
 import CustomForm from "../../components/common/form";
 import AdminCategoryView from "../../components/admin/categories";
 import { useDispatch } from "react-redux";
-import { createAdminCategories, editAdminCategories, getAllAdminCategories } from "../../store/admin/category-slice";
+import { createAdminCategories, deleteAdminCategories, editAdminCategories, getAllAdminCategories } from "../../store/admin/category-slice";
 import useShowToast from "../../hooks/useShowToast";
+import { useRef } from "react";
 
 const initialFormData = {
   name: "",
@@ -28,12 +35,16 @@ const initialFormData = {
 function AdminCategory() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentEditedId, setCurrentEditedId] = useState(null);
+  const [categoryDeletedId, setCategoryDeletedId] = useState(null);
   const [formData, setFormData] = useState(initialFormData);
+    const cancelRef = useRef();
+   const {
+     isOpen: isDeleteOpen,
+     onOpen: onDeleteOpen,
+     onClose: onDeleteClose,
+   } = useDisclosure();
   const dispatch = useDispatch();
   const Toast = useShowToast();
-
-  console.log("currentEditedId", currentEditedId);
-  
 
   const handleAddNewCategory = () => {
     onOpen();
@@ -42,7 +53,7 @@ function AdminCategory() {
     onClose();
   };
 
-  console.log("setFormData", formData);
+  console.log("categoryDeletedId", categoryDeletedId);
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -61,7 +72,6 @@ function AdminCategory() {
               data: formData,
             })
           ).unwrap();
-          console.log("category edit dispatch", data);
     
           if (data?.status) {
             dispatch(getAllAdminCategories());
@@ -96,6 +106,27 @@ function AdminCategory() {
           Toast("Error", errorMsg, "error");
         }
   };
+
+  const handleCategoryDelete= async()=>{
+     try {
+       const data = await dispatch(
+         deleteAdminCategories(categoryDeletedId)
+       ).unwrap();
+       if (data?.status) {
+        //  dispatch(getAllAdminCategories());
+         onDeleteClose();
+         Toast("Success", "Category Delete Successfully", "success");
+       }
+     } catch (error) {
+       console.error("delete category Error:", error);
+       const errorMsg =
+         error?.message || "Something went wrong";
+       Toast("Error", errorMsg, "error");
+     }
+    
+  }
+
+
   return (
     <Fragment>
       {/* Add Product Button */}
@@ -107,7 +138,9 @@ function AdminCategory() {
 
       <AdminCategoryView
         setCurrentEditedId={setCurrentEditedId}
+        setCategoryDeletedId={setCategoryDeletedId}
         setFormData={setFormData}
+        onDeleteOpen={onDeleteOpen}
         onOpen={onOpen}
       />
 
@@ -142,6 +175,31 @@ function AdminCategory() {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
+
+      <AlertDialog
+        isOpen={isDeleteOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onDeleteClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Delete Category
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              Are you sure? You can't undo this action afterwards.
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onDeleteClose}>
+                No
+              </Button>
+              <Button colorScheme="red" onClick={handleCategoryDelete} ml={3}>
+                Yes
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Fragment>
   );
 }
