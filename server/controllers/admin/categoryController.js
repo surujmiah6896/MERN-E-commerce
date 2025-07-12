@@ -67,5 +67,23 @@ categoryController.updateCategory = async(req, res) =>{
     }
 }
 
+categoryController.deleteCategory = async(req, res)=>{
+    try {
+        const { id } = req.params;
+        const category = await Category.findById(id);
+        if (!category) {
+            return sendWithResponse(res, 404, false, "Category not found");
+        }
+        const hasProduct = await category.populate('products').then(cat => cat.products && cat.products.length > 0);
+        if (hasProduct) {
+            return sendWithResponse(res, 400, false, "Cannot delete category with products");
+        }
+        await Category.findByIdAndDelete(id);
+        return sendWithResponse(res, 200, true, "Category deleted successfully!");
+    } catch (error) {
+        return sendWithResponse(res, 500, false, "Failed to delete category");
+    }
+}
+
 
 module.exports = categoryController;

@@ -23,6 +23,7 @@ const shopCartRouter= require("./routes/shop/cart-routes");
 const shopOrderRouter = require("./routes/order-routes");
 const adminCategoryRouter = require("./routes/admin/category-routes");
 const adminOrderRouter = require("./routes/admin/order-routers");
+const adminSubcategoryRouter = require("./routes/admin/subcategory-routes");
 //init app
 const app = express();
 dotenv.config();
@@ -62,6 +63,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/admin/products", authProductsRouter);
 app.use("/api/admin/orders", adminOrderRouter);
 app.use("/api/admin/category", adminCategoryRouter);
+app.use("/api/admin/subcategory", adminSubcategoryRouter);
 
 app.use("/api/shop/products", shopProductsRouter);
 app.use("/api/shop/cart", shopCartRouter);
