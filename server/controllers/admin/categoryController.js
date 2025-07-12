@@ -27,5 +27,17 @@ categoryController.storeCategory = async (req, res) =>{
     }
 }
 
+categoryController.getAllCategory = async (req, res) =>{
+    try {
+        const categories = await Category.find({});
+        if (!categories || categories.length === 0) {
+            return sendWithResponse(res, 404, false, "No categories found");
+        }
+        return sendWithData(res, 200, true, categories, "Categories fetched successfully!");
+    } catch (error) {
+        return sendWithResponse(res, 500, false, "Failed to fetch categories");
+    }
+}
+
 
 module.exports = categoryController;
