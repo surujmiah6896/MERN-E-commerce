@@ -36,6 +36,30 @@ export const fetchAllFilteredProducts = createAsyncThunk(
   }
 );
 
+export const fetchProductsWithCategoryId = createAsyncThunk(
+  "/products/withCategoryId",
+  async (id, { rejectWithValue }) => {
+    try {
+      
+      const result = await axios.get(
+        `http://localhost:5000/api/shop/products/category/${id}`
+      );
+
+      console.log(result);
+
+      return result?.data;
+    } catch (err) {
+      console.log("send require", err);
+
+      if (err.response && err.response.data) {
+        return rejectWithValue(err.response.data);
+      } else {
+        return rejectWithValue({ message: err.message });
+      }
+    }
+  }
+);
+
 
 const shoppingProductSlice = createSlice({
   name: "shoppingProducts",
@@ -54,7 +78,19 @@ const shoppingProductSlice = createSlice({
         state.isLoading = false;
         state.products = action?.payload?.status ? action?.payload?.data : null;
       })
-      .addCase(fetchAllFilteredProducts.rejected, (state, action)=>{
+      .addCase(fetchAllFilteredProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.products = [];
+        state.error = action?.payload?.error?.message;
+      })
+      .addCase(fetchProductsWithCategoryId.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchProductsWithCategoryId.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.products = action?.payload?.status ? action?.payload?.data : null;
+      })
+      .addCase(fetchProductsWithCategoryId.rejected, (state, action) => {
         state.isLoading = false;
         state.products = [];
         state.error = action?.payload?.error?.message;

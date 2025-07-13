@@ -35,8 +35,7 @@ import { getAllAdminCategories } from "../../store/admin/category-slice";
 //menu item
 function MenuItems() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
+  // const [searchParams, setSearchParams] = useSearchParams();
   const { categories } = useSelector((state) => state.adminCategory);
   const dispatch = useDispatch(); 
 
@@ -48,26 +47,7 @@ function MenuItems() {
   console.log("header menus", categories);
   
 
-  function handleNavigate(getCurrentMenuItem) {
-    sessionStorage.removeItem("filters");
-
-    const currentFilter =
-      getCurrentMenuItem.id !== "home" &&
-      getCurrentMenuItem.id !== "products" &&
-      getCurrentMenuItem.id !== "search"
-        ? { category: [getCurrentMenuItem.id] }
-        : null;
-
-    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
-
-    if (location.pathname.includes("listing") && currentFilter !== null) {
-      setSearchParams(
-        new URLSearchParams(`?category=${getCurrentMenuItem.id}`)
-      );
-    } else {
-      navigate(getCurrentMenuItem.path);
-    }
-  }
+ 
 
   return (
     <Flex
@@ -82,7 +62,7 @@ function MenuItems() {
           fontSize="sm"
           fontWeight="medium"
           cursor="pointer"
-          onClick={() => handleNavigate(menuItem)}
+          onClick={() => navigate(`/shop/category/${menuItem._id}`)}
           _hover={{ color: "blue.500" }}
         >
           {menuItem.name}

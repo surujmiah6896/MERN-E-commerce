@@ -52,4 +52,17 @@ productController.getFilteredProducts = async (req, res) => {
     }
   };
 
+productController.getProductWithCategoryId = async(req, res) =>{
+  try{
+    const { id } = req.params;
+    const products = await Product.find({ categoryId: id }).populate("category");
+    if(products.length <= 0){
+      return sendWithResponse(res, 404, false, "Product not fount");
+    }
+    return sendWithData(res, 200, true, products, "Products fetched successfully");
+  }catch(err){
+    return sendWithResponse(res, 500, false, "Product get by CategoryId Error");
+  }
+}
+
 module.exports = productController;
