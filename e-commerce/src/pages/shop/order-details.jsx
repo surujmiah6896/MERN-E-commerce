@@ -98,6 +98,18 @@ const OrderDetailsContent = ({orderDetails}) => {
           </List>
         </VStack>
 
+        {/* Shipping Info Section */}
+        <VStack align="stretch" spacing={2}>
+          <Text fontWeight="medium">Shipping Info</Text>
+          <VStack align="start" spacing={1} fontSize="sm">
+            <Text>{user?.userName}</Text>
+            <Text>{orderDetails?.addressInfo?.address}</Text>
+            <Text>{orderDetails?.addressInfo?.city}</Text>
+            <Text>{orderDetails?.addressInfo?.pincode}</Text>
+            <Text>{orderDetails?.addressInfo?.phone}</Text>
+            <Text>{orderDetails?.addressInfo?.notes}</Text>
+          </VStack>
+        </VStack>
       </VStack>
     </ModalBody>
   );
