@@ -5,17 +5,30 @@ const productController = {};
 
 productController.getFilteredProducts = async (req, res) => {
     try {
-      const { category = [], brand = [], sortBy = "price-lowtohigh" } = req.query;
+      const {
+        categories = "",
+        brands = "",
+        minPrice = 0,
+        maxPrice = 0,
+        search = "",
+        sortBy = "price-lowtohigh",
+      } = req.query;
   
       let filters = {};
   
-      if (category.length) {
-        filters.category = { $in: category.split(",") };
+      if (categories.length) {
+        filters.category = { $in: categories.split(",") };
       }
   
-      if (brand.length) {
-        filters.brand = { $in: brand.split(",") };
+      if (brands.length) {
+        filters.brand = { $in: brands.split(",") };
       }
+
+      if (search.trim().length > 0) {
+        filters.title = { $regex: search.trim(), $options: "i" }; // Case-insensitive
+      }
+
+      filters.salePrice = { $gte: Number(minPrice), $lte: Number(maxPrice) };
   
       let sort = {};
   
@@ -45,7 +58,7 @@ productController.getFilteredProducts = async (req, res) => {
   
       const products = await Product.find(filters).sort(sort);
   
-      return sendWithData(res, 200, true, products, "get product successfull");
+      return sendWithData(res, 200, true, products, "get product successfully");
     } catch (e) {
       console.log(error);
       return sendWithResponse(res, 500, false, "Some error occured" );

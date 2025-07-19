@@ -9,10 +9,16 @@ import {
   Grid,
   Heading,
   Image,
+  Input,
   Spinner,
   Text,
   useColorModeValue,
   VStack,
+  RangeSlider,
+  RangeSliderTrack,
+  RangeSliderFilledTrack,
+  RangeSliderThumb,
+  Select,
 } from "@chakra-ui/react";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
@@ -56,21 +62,24 @@ const CategoryProducts = () => {
   
 
   const [selectedCategories, setSelectedCategories] = useState([]);
-  // const [selectedBrands, setSelectedBrands] = useState([]);
-  // const [priceRange, setPriceRange] = useState([0, 1000]);
-  // const [searchQuery, setSearchQuery] = useState("");
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("price-lowtohigh");
 
-  const handleChange = (selected) => {
+
+  useEffect(() => {
     const filters = {
-      categories: selectedCategories.join(","), // Join array to comma-separated string
-      // brands: selectedBrands.join(","),
-      // minPrice: priceRange[0],
-      // maxPrice: priceRange[1],
-      // search: searchQuery.trim(),
+      categories: selectedCategories.join(","),
+      brands: selectedBrands.join(","),
+      minPrice: priceRange[0],
+      maxPrice: priceRange[1],
+      search: searchQuery.trim(),
     };
-    dispatch(fetchAllFilteredProducts(filters));
- 
-  };
+    dispatch(
+      fetchAllFilteredProducts({ filterParams: filters, sortParams: sortBy })
+    );
+  }, [selectedCategories, selectedBrands, priceRange, searchQuery, sortBy]);
 
 
     const handleGetProductDetails = (productId) => {
@@ -180,7 +189,7 @@ const CategoryProducts = () => {
       <Flex w="full" gap={6} flexDir={{ base: "column", md: "row" }}>
         {/* Left Sidebar: Categories */}
         <Box
-          h="80vh"
+          h="90vh"
           w={{ base: "full", md: "16rem" }}
           borderRightWidth={{ base: 0, md: "1px" }}
           pr={{ base: 0, md: 6 }}
@@ -204,7 +213,24 @@ const CategoryProducts = () => {
             Filter by Category
           </Heading>
 
-          <CheckboxGroup value={selectedCategories} onChange={handleChange}>
+          {/* Search */}
+          <Text fontSize="md" fontWeight="bold" mb="5px">
+            Search
+          </Text>
+          <Input
+            placeholder="Ex: T-shirt"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+
+          {/* Categories */}
+          <Text fontSize="md" fontWeight="bold" mt={6} mb="5px">
+            Categories
+          </Text>
+          <CheckboxGroup
+            value={selectedCategories}
+            onChange={setSelectedCategories}
+          >
             <VStack align="start" spacing={3}>
               {categories.map((cat) => (
                 <Checkbox key={cat._id} value={cat._id} colorScheme="blue">
@@ -213,13 +239,61 @@ const CategoryProducts = () => {
               ))}
             </VStack>
           </CheckboxGroup>
+
+          {/* Brands */}
+          <Text fontSize="md" fontWeight="bold" mt={6} mb="5px">
+            Brands
+          </Text>
+          <CheckboxGroup value={selectedBrands} onChange={setSelectedBrands}>
+            <VStack align="start" spacing={3}>
+              {/* {brands.map((brand) => (
+                <Checkbox key={brand._id} value={brand._id} colorScheme="green">
+                  {brand.name}
+                </Checkbox>
+              ))} */}
+            </VStack>
+          </CheckboxGroup>
+
+          {/* Price Range */}
+          <Text fontSize="md" fontWeight="bold" mt={6} mb="5px">
+            Price Range: ${priceRange[0]} - ${priceRange[1]}
+          </Text>
+          <RangeSlider
+            aria-label={["min", "max"]}
+            defaultValue={priceRange}
+            min={0}
+            max={1000}
+            step={10}
+            colorScheme="pink"
+            onChangeEnd={(val) => setPriceRange(val)}
+          >
+            <RangeSliderTrack>
+              <RangeSliderFilledTrack />
+            </RangeSliderTrack>
+            <RangeSliderThumb index={0} />
+            <RangeSliderThumb index={1} />
+          </RangeSlider>
         </Box>
 
         {/* Right Content: Products */}
         <Box flex="1" color={"black"}>
-          <Heading size="md" mb={4}>
-            Products
-          </Heading>
+          <Flex flex={"row"} justifyContent="space-between">
+            <Heading size="md" mb={4}>
+              Products
+            </Heading>
+            <Box>
+              <Select
+                placeholder="Select sorting"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                <option value="price-lowtohigh">Price: Low to High</option>
+                <option value="price-hightolow">Price: High to Low</option>
+                <option value="title-atoz">Title: A → Z</option>
+                <option value="title-ztoa">Title: Z → A</option>
+              </Select>
+            </Box>
+          </Flex>
           <Grid templateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap={6}>
             {products && products.length > 0
               ? products.map((product) => (

@@ -46,6 +46,7 @@ authController.loginUser = async(req, res) =>{
         if(!checkPassword){
             return sendWithResponse(res, 401, false, "Incorrect password! please try again");
         }
+        
         const token = jwt.sign({
             id: user._id,
             role: user.role,
