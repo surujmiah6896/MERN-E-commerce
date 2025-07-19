@@ -18,6 +18,7 @@ import AdminOrders from "./pages/admin/orders";
 import UnauthPage from "./pages/unauth-page";
 import AdminCategory from "./pages/admin/category";
 import CategoryProducts from "./pages/category_product";
+import ShoppingAccount from "./pages/shop/account";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -68,6 +69,7 @@ function App() {
         <Route path="/shop" element={<ShoppingLayout />}>
           <Route path="home" element={<ShoppingHome />}></Route>
           <Route path="checkout" element={<ShoppingCheckout />}></Route>
+          <Route path="account" element={<ShoppingAccount />}></Route>
           <Route path="category/:categoryId" element={<CategoryProducts />} />
         </Route>
         <Route path="/unauth-page" element={<UnauthPage />} />

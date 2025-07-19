@@ -27,7 +27,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 // Your thunks
-import { shoppingViewHeaderMenuItems } from "../config";
 import { getFeatureImages } from "../store/feature-slice";
 import { getAllAdminCategories } from "../store/admin/category-slice";
 import { fetchAllFilteredProducts, fetchProductsWithCategoryId } from "../store/shop/product-slice";
@@ -56,7 +55,7 @@ const CategoryProducts = () => {
 
   useEffect(()=>{
     dispatch(fetchProductsWithCategoryId(categoryId));
-  },[dispatch]);
+  }, [dispatch]);
 
   console.log("products", products);
   
@@ -82,28 +81,28 @@ const CategoryProducts = () => {
   }, [selectedCategories, selectedBrands, priceRange, searchQuery, sortBy]);
 
 
-    const handleGetProductDetails = (productId) => {
-      console.log("get product details", productId);
-    };
-  
-    const handleAddtoCart = async(product_id,) => {
-      console.log("add to cart", product_id);
-        try{
-            const data = await dispatch(
-              addToCart({ userId: user?.id, productId: product_id, quantity: 1 })
-            ).unwrap();
-            console.error("Add to cart Error:", data);
-            if (data?.status) {
-              Toast("Success", "Add to cart Successfully", "success");
-            }
-         } catch (error) {
-           console.error("Add to cart Error:", error);
-           const errorMsg =
-             error?.message || error?.errors?.avatar?.msg || "Something went wrong";
-           Toast("Error", errorMsg, "error");
-         }
-     
-    };
+  const handleGetProductDetails = (productId) => {
+    console.log("get product details", productId);
+  };
+
+  const handleAddtoCart = async(product_id,) => {
+    console.log("add to cart", product_id);
+      try{
+          const data = await dispatch(
+            addToCart({ userId: user?.id, productId: product_id, quantity: 1 })
+          ).unwrap();
+          console.error("Add to cart Error:", data);
+          if (data?.status) {
+            Toast("Success", "Add to cart Successfully", "success");
+          }
+        } catch (error) {
+          console.error("Add to cart Error:", error);
+          const errorMsg =
+            error?.message || error?.errors?.avatar?.msg || "Something went wrong";
+          Toast("Error", errorMsg, "error");
+        }
+    
+  };
 
   useEffect(() => {
     if (categoryId) dispatch(fetchProductsWithCategoryId(categoryId));
