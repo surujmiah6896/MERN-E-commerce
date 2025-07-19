@@ -10,11 +10,19 @@ import {
   Badge,
   Button,
   useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getAllOrdersByUserId, getOrderDetails } from "../../store/shop/order-slice";
 import { SquarePen } from "lucide-react";
+import OrderDetailsContent from "./order-details";
 
 const ShoppingOrders = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -96,13 +104,22 @@ const ShoppingOrders = () => {
                     <SquarePen />
                   </Button>
 
-                  {/* {isOpen && (
-                    <ShoppingOrderDetailsView
-                      orderDetails={orderDetails}
-                      isOpen={isOpen}
-                      onClose={handleClose}
-                    />
-                  )} */}
+                  <Modal isOpen={isOpen} onClose={onClose} size="lg">
+                    <ModalOverlay />
+                    <ModalContent>
+                      <ModalHeader>Order Details</ModalHeader>
+                      <ModalCloseButton />
+                      <ModalBody>
+                        <OrderDetailsContent
+                          orderDetails={orderDetails}
+                          user={user}
+                        />
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button onClick={onClose}>Close</Button>
+                      </ModalFooter>
+                    </ModalContent>
+                  </Modal>
                 </Td>
               </Tr>
             ))
