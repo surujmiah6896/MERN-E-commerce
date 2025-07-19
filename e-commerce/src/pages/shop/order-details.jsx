@@ -81,7 +81,23 @@ const OrderDetailsContent = ({orderDetails}) => {
 
         <Divider />
 
-       
+        {/* Order Items Section */}
+        <VStack align="stretch" spacing={2}>
+          <Text fontWeight="medium">Order Details</Text>
+          <List spacing={3}>
+            {orderDetails?.cartItems?.length > 0 &&
+              orderDetails.cartItems.map((item, idx) => (
+                <ListItem key={idx}>
+                  <HStack justify="space-between">
+                    <Text>Title: {item.title}</Text>
+                    <Text>Quantity: {item.quantity}</Text>
+                    <Text>Price: ${item.price}</Text>
+                  </HStack>
+                </ListItem>
+              ))}
+          </List>
+        </VStack>
+
       </VStack>
     </ModalBody>
   );
