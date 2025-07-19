@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getFeatureImages } from "../../store/feature-slice";
 import { useState } from "react";
+import ShoppingOrders from "./orders";
 
 const ShoppingAccount = () => {
     const dispatch = useDispatch();
@@ -54,7 +55,7 @@ const ShoppingAccount = () => {
             </TabList>
 
             <TabPanels>
-              <TabPanel>{/* <ShoppingOrders /> */}</TabPanel>
+              <TabPanel><ShoppingOrders /></TabPanel>
               <TabPanel>{/* <Address />  */}</TabPanel>
             </TabPanels>
           </Tabs>

@@ -80,6 +80,8 @@ export const getAllOrdersByUserId = createAsyncThunk(
 export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails",
   async (id, {rejectWithValue}) => {
+    console.log('call get order details', id);
+    
     try {
       const response = await axios.get(
         `http://localhost:5000/api/shop/order/details/${id}`
