@@ -105,22 +105,9 @@ const CategoryProducts = () => {
      
     };
 
-
-
-//   const { categories, isLoading: loadingCategories } = useSelector(
-//     (state) => state.category
-//   );
-//   const { categoryProducts, isLoading: loadingProducts } = useSelector(
-//     (state) => state.product
-//   );
-
-//   useEffect(() => {
-//     dispatch(getAllAdminCategories());
-//   }, [dispatch]);
-
-//   useEffect(() => {
-//     if (categoryId) dispatch(getProductsByCategory(categoryId));
-//   }, [dispatch, categoryId]);
+  useEffect(() => {
+    if (categoryId) dispatch(fetchProductsWithCategoryId(categoryId));
+  }, [dispatch, categoryId]);
 
 
 
