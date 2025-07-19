@@ -17,7 +17,7 @@ productController.getFilteredProducts = async (req, res) => {
       let filters = {};
   
       if (categories.length) {
-        filters.category = { $in: categories.split(",") };
+        filters.categoryId = { $in: categories.split(",") };
       }
   
       if (brands.length) {
