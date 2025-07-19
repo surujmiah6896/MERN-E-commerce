@@ -35,7 +35,7 @@ import { useNavigate } from "react-router-dom";
 // import ShoppingProductTile from "./ShoppingProductTile";
 import useShowToast from "../../hooks/useShowToast";
 import { getFeatureImages } from "../../store/feature-slice";
-import { fetchAllFilteredProducts } from "../../store/shop/product-slice";
+import { fetchAllFilteredProducts, fetchProductsWithCategoryId } from "../../store/shop/product-slice";
 import ShoppingProductList from "../../components/shop/product-list";
 import { addToCart } from "../../store/cart-slice";
 
@@ -75,10 +75,7 @@ function ShoppingHome() {
 
   useEffect(() => {
     dispatch(
-      fetchAllFilteredProducts({
-        filterParams: {},
-        sortParams: "price-lowtohigh",
-      })
+      fetchProductsWithCategoryId(null)
     );
   }, [dispatch]);
 

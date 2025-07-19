@@ -4,6 +4,8 @@ const Product = require("../../models/Product");
 const productController = {};
 
 productController.getFilteredProducts = async (req, res) => {
+  const r = req.query;
+  
     try {
       const {
         categories = "",
@@ -13,6 +15,7 @@ productController.getFilteredProducts = async (req, res) => {
         search = "",
         sortBy = "price-lowtohigh",
       } = req.query;
+      
   
       let filters = {};
   
@@ -55,9 +58,8 @@ productController.getFilteredProducts = async (req, res) => {
           sort.price = 1;
           break;
       }
-  
+
       const products = await Product.find(filters).sort(sort);
-  
       return sendWithData(res, 200, true, products, "get product successfully");
     } catch (e) {
       console.log(error);
@@ -68,7 +70,13 @@ productController.getFilteredProducts = async (req, res) => {
 productController.getProductWithCategoryId = async(req, res) =>{
   try{
     const { id } = req.params;
-    const products = await Product.find({ categoryId: id }).populate("category");
+    let products;
+    if(id === 'null'){
+       products = await Product.find({});
+    }else{
+       products = await Product.find({ categoryId: id }).populate("category");
+    }
+    
     if(products.length <= 0){
       return sendWithResponse(res, 404, false, "Product not fount");
     }
