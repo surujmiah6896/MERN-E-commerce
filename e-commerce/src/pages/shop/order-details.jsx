@@ -40,7 +40,7 @@ const OrderDetailsContent = ({orderDetails}) => {
         <VStack spacing={3} align="stretch">
           <HStack justify="space-between">
             <Text fontWeight="medium">Order ID</Text>
-            <Text color={labelColor}>{orderDetails._id}</Text>
+            <Text color={labelColor}>{orderDetails?._id}</Text>
           </HStack>
 
           <HStack justify="space-between">
