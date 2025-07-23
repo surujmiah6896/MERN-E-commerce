@@ -10,15 +10,15 @@ import { useDispatch } from "react-redux";
 import { logoutUser } from "../../store/auth-slice";
 import useShowToast from "../../hooks/useShowToast";
 
-const AdminHeader = ({ setOpen }) => {
+const AdminHeader = ({ onOpen }) => {
   const isMobile = useBreakpointValue({ base: true, lg: false });
   const dispatch = useDispatch();
   const Toast = useShowToast();
-  const handleLogout = ()=>{
-    try{
+  const handleLogout = () => {
+    try {
       const data = dispatch(logoutUser()).unwrap();
       if (data?.status) {
-            Toast("Success", "Logged out Successfully", "success");
+        Toast("Success", "Logged out Successfully", "success");
       }
     } catch (error) {
       console.error("Logged out Error:", error);
@@ -26,7 +26,7 @@ const AdminHeader = ({ setOpen }) => {
         error?.message || error?.errors?.avatar?.msg || "Something went wrong";
       Toast("Error", errorMsg, "error");
     }
-  }
+  };
 
   return (
     <Box
@@ -42,7 +42,7 @@ const AdminHeader = ({ setOpen }) => {
           <IconButton
             icon={<AlignJustify />}
             aria-label="Toggle Menu"
-            onClick={() => setOpen(true)}
+            onClick={() => onOpen(true)}
             display={{ base: "block", lg: "none" }}
           />
         )}
